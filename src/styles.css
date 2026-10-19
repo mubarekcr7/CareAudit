@@ -265,3 +265,6 @@ h2, h3 { letter-spacing: -.055em; }
 .admin-credentials-form .auth-error, .admin-credentials-form .button { grid-column: 1 / -1; }
 @media (max-width: 900px) { .admin-credentials-panel { grid-template-columns: 1fr; gap: 3px; } }
 @media (max-width: 580px) { .admin-credentials-panel { padding: 20px 17px; }.admin-credentials-form { grid-template-columns: 1fr; } }
+
+.admin-review-badge { display: inline-flex; align-items: center; gap: 8px; color: #2f6348; background: #e5f5e8; border: 1px solid #cde7d8; border-radius: 999px; padding: 10px 13px; font-size: 12px; font-weight: 600; }
+.report-download-error { max-width: 1240px; margin: 0 auto -20px; }

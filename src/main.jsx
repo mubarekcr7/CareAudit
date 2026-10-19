@@ -279,7 +279,8 @@ function getInitialRoute() {
 }
 
 function App({ currentUser, authStore, onAddInspector, onToggleInspector, onResetInspector, onAdminChange, onLogout }) {
-  const [records, setRecords] = useState(loadRecords);
+  const [records, setRecords] = useState(() => currentUser.role === 'admin' ? [] : loadRecords());
+  const [recordsLoading, setRecordsLoading] = useState(currentUser.role === 'admin');
   const initialRoute = useMemo(getInitialRoute, []);
   const [view, setView] = useState(initialRoute.view);
   const [activeRecordId, setActiveRecordId] = useState(initialRoute.recordId);
@@ -288,17 +289,31 @@ function App({ currentUser, authStore, onAddInspector, onToggleInspector, onRese
   const [mobileMenu, setMobileMenu] = useState(false);
 
   useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-  }, [records]);
+    if (currentUser.role === 'inspector') window.localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+  }, [records, currentUser.role]);
 
   useEffect(() => {
-    if (view === 'new' && !activeRecordId) {
+    if (currentUser.role !== 'admin') return undefined;
+    let active = true;
+    setRecordsLoading(true);
+    apiRequest('/inspections').then(({ inspections }) => {
+      if (active) setRecords(inspections || []);
+    }).catch(() => {
+      if (active) setRecords([]);
+    }).finally(() => {
+      if (active) setRecordsLoading(false);
+    });
+    return () => { active = false; };
+  }, [currentUser.role]);
+
+  useEffect(() => {
+    if (currentUser.role === 'inspector' && view === 'new' && !activeRecordId) {
       const record = createInspection(selectedTemplateId);
       setRecords((current) => [record, ...current]);
       setActiveRecordId(record.id);
       window.history.replaceState({}, '', `/new`);
     }
-  }, [view, activeRecordId, selectedTemplateId]);
+  }, [view, activeRecordId, selectedTemplateId, currentUser.role]);
 
   useEffect(() => {
     const handlePopState = () => {
@@ -316,6 +331,11 @@ function App({ currentUser, authStore, onAddInspector, onToggleInspector, onRese
       setView('dashboard');
       window.history.replaceState({}, '', '/');
     }
+    if (currentUser.role === 'admin' && ['new', 'audit', 'summary', 'library'].includes(view)) {
+      setView('dashboard');
+      setActiveRecordId(null);
+      window.history.replaceState({}, '', '/');
+    }
   }, [view, currentUser.role]);
 
   const activeRecord = records.find((record) => record.id === activeRecordId) || null;
@@ -330,6 +350,7 @@ function App({ currentUser, authStore, onAddInspector, onToggleInspector, onRese
   };
 
   const updateRecord = (id, patch) => {
+    if (currentUser.role !== 'inspector') return;
     setRecords((current) => current.map((record) => {
       if (record.id !== id) return record;
       const editingFinalized = record.status === 'completed' && Boolean(patch.responses || patch.metadata || patch.templateId);
@@ -343,6 +364,7 @@ function App({ currentUser, authStore, onAddInspector, onToggleInspector, onRese
   };
 
   const startInspection = (templateId = selectedTemplateId) => {
+    if (currentUser.role !== 'inspector') return;
     const record = createInspection(templateId);
     setRecords((current) => [record, ...current]);
     setActiveRecordId(record.id);
@@ -353,10 +375,18 @@ function App({ currentUser, authStore, onAddInspector, onToggleInspector, onRese
     const record = records.find((item) => item.id === recordId);
     if (!record) return;
     setActiveRecordId(recordId);
-    navigate(target, recordId);
+    navigate(currentUser.role === 'admin' ? 'report' : target, recordId);
+  };
+
+  const submitInspection = async (record) => {
+    const completedRecord = { ...record, status: 'completed', completedAt: record.completedAt || new Date().toISOString(), updatedAt: new Date().toISOString() };
+    await apiRequest('/inspections/submit', { method: 'POST', body: JSON.stringify({ record: completedRecord }) });
+    setRecords((current) => current.map((item) => item.id === record.id ? completedRecord : item));
+    return completedRecord;
   };
 
   const removeRecord = (recordId) => {
+    if (currentUser.role !== 'inspector') return;
     setRecords((current) => current.filter((record) => record.id !== recordId));
     if (activeRecordId === recordId) {
       setActiveRecordId(null);
@@ -390,11 +420,11 @@ function App({ currentUser, authStore, onAddInspector, onToggleInspector, onRese
             </button>
           ))}
         </nav>
-        <div className="sidebar-cta">
+        {currentUser.role === 'inspector' && <div className="sidebar-cta">
           <div className="sidebar-cta-kicker"><Sparkles size={14} /> FIELD NOTE</div>
           <p>Keep the visit focused on what changes care.</p>
           <button className="button compact light" onClick={() => startInspection()}><Plus size={15} /> New inspection</button>
-        </div>
+        </div>}
         <div className="sidebar-footer">
           <ShieldCheck size={15} /> <span>Offline-ready workspace</span>
         </div>
@@ -408,19 +438,19 @@ function App({ currentUser, authStore, onAddInspector, onToggleInspector, onRese
             <strong>{view === 'dashboard' ? 'Overview' : view === 'library' ? 'Checklist library' : view === 'new' ? 'New inspection' : view === 'team' ? 'Inspector accounts' : activeTemplate?.title || 'Inspection'}</strong>
           </div>
           <div className="topbar-actions">
-            <span className="save-indicator"><span /> Saved locally</span>
+            <span className="save-indicator"><span /> {currentUser.role === 'admin' ? 'Submitted reports' : 'Saved locally'}</span>
             <span className="role-chip"><span className="role-chip-dot" /> {currentUser.role === 'admin' ? 'Admin' : 'Inspector'}</span>
             <button className="avatar-button" title="Sign out" onClick={onLogout}>{(currentUser.name || currentUser.username || 'CA').slice(0, 2).toUpperCase()}</button>
           </div>
         </header>
 
-        {view === 'dashboard' && <Dashboard records={records} onStart={startInspection} onOpen={openAudit} onRemove={removeRecord} onLibrary={() => navigate('library')} />}
-        {view === 'library' && <Library search={librarySearch} setSearch={setLibrarySearch} selectedTemplateId={selectedTemplateId} setSelectedTemplateId={setSelectedTemplateId} onStart={startInspection} />}
+        {view === 'dashboard' && <Dashboard records={records} role={currentUser.role} loading={recordsLoading} onStart={startInspection} onOpen={openAudit} onRemove={removeRecord} onLibrary={() => navigate('library')} />}
+        {view === 'library' && currentUser.role === 'inspector' && <Library search={librarySearch} setSearch={setLibrarySearch} selectedTemplateId={selectedTemplateId} setSelectedTemplateId={setSelectedTemplateId} onStart={startInspection} />}
         {view === 'team' && currentUser.role === 'admin' && <Team authStore={authStore} onAddInspector={onAddInspector} onToggleInspector={onToggleInspector} onResetInspector={onResetInspector} onAdminChange={onAdminChange} />}
         {view === 'new' && activeRecord && activeTemplate && <NewInspection record={activeRecord} template={activeTemplate} selectedTemplateId={selectedTemplateId} setSelectedTemplateId={setSelectedTemplateId} onUpdate={updateRecord} onStart={openAudit} onCancel={() => navigate('dashboard')} />}
         {view === 'audit' && activeRecord && activeTemplate && <AuditWorkspace record={activeRecord} template={activeTemplate} onUpdate={updateRecord} onSummary={() => navigate('summary', activeRecord.id)} onExit={() => navigate('dashboard')} />}
-        {view === 'summary' && activeRecord && activeTemplate && <Summary record={activeRecord} template={activeTemplate} onUpdate={updateRecord} onAudit={() => navigate('audit', activeRecord.id)} onReport={() => navigate('report', activeRecord.id)} />}
-        {view === 'report' && activeRecord && activeTemplate && activeRecord.status === 'completed' && <Report record={activeRecord} template={activeTemplate} onAudit={() => navigate('audit', activeRecord.id)} onSummary={() => navigate('summary', activeRecord.id)} />}
+        {view === 'summary' && currentUser.role === 'inspector' && activeRecord && activeTemplate && <Summary record={activeRecord} template={activeTemplate} onUpdate={updateRecord} onAudit={() => navigate('audit', activeRecord.id)} onFinalize={submitInspection} onReport={() => navigate('report', activeRecord.id)} />}
+        {view === 'report' && activeRecord && activeTemplate && activeRecord.status === 'completed' && <Report record={activeRecord} template={activeTemplate} isAdmin={currentUser.role === 'admin'} onAudit={() => navigate('audit', activeRecord.id)} onSummary={() => navigate('summary', activeRecord.id)} onBack={() => navigate('dashboard', null)} />}
         {view === 'report' && activeRecord && activeTemplate && activeRecord.status !== 'completed' && <Summary record={activeRecord} template={activeTemplate} onUpdate={updateRecord} onAudit={() => navigate('audit', activeRecord.id)} onReport={() => navigate('report', activeRecord.id)} />}
         {recordView && (!activeRecord || !activeTemplate) && <MissingRecord onHome={() => navigate('dashboard', null)} />}
       </main>
@@ -516,8 +546,9 @@ function Team({ authStore, onAddInspector, onToggleInspector, onResetInspector, 
   return <div className="page team-page"><PageHeader eyebrow="ADMIN CONTROL ROOM" title="The inspector roster." description="Create and manage the credentials your inspection team uses to enter this shared workspace." action={<div className="team-admin-badge"><UserCog size={15} /> Signed in as admin</div>} /><div className="team-layout"><section className="panel team-form-panel"><div className="eyebrow">ADD AN INSPECTOR</div><h2>Assign a new login.</h2><p className="team-muted">Inspector accounts are stored in the shared CareAudit database and can sign in from any approved session.</p><form className="team-form" onSubmit={addInspector}><label className="field"><span>Inspector name <b>*</b></span><input value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Aster Tesfaye" /></label><label className="field"><span>Username <b>*</b></span><input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="aster.tesfaye" /></label><label className="field"><span>Temporary password <b>*</b></span><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" /></label>{error && <div className="auth-error"><XCircle size={15} /> {error}</div>}{notice && <div className="team-notice"><CheckCircle2 size={15} /> {notice}</div>}<button className="button primary full" disabled={busy} type="submit"><UserPlus size={16} /> {busy ? 'Creating…' : 'Create inspector account'}</button></form></section><section className="panel roster-panel"><div className="panel-heading"><div><div className="eyebrow">TEAM DIRECTORY</div><h2>People with access</h2></div><span className="roster-count">{authStore.inspectors.length} {authStore.inspectors.length === 1 ? 'inspector' : 'inspectors'}</span></div>{authStore.inspectors.length === 0 ? <div className="roster-empty"><Users size={22} /><strong>No inspector accounts yet.</strong><span>Add the first person who will conduct visits.</span></div> : <div className="roster-list">{authStore.inspectors.map((inspector) => <div className="roster-row" key={inspector.id}><div className="roster-avatar"><UserRound size={16} /></div><div className="roster-main"><strong>{inspector.name}</strong><span>@{inspector.username} · added {formatShortDate(inspector.createdAt)}</span></div><span className={`account-status ${inspector.active === false ? 'inactive' : 'active'}`}><span /> {inspector.active === false ? 'Paused' : 'Active'}</span><button className="roster-action" onClick={() => resetPassword(inspector)} title="Reset password"><KeyRound size={15} /></button><button className="roster-action" onClick={() => toggleInspector(inspector)} title={inspector.active === false ? 'Activate account' : 'Pause account'}>{inspector.active === false ? <LogIn size={15} /> : <LogOut size={15} />}</button></div>)}</div>}</section></div><section className="panel admin-credentials-panel"><div><div className="eyebrow">ADMIN SETTINGS</div><h2>Change admin credentials.</h2><p className="team-muted">Update the admin name, username, or password. Your current password is required for every change.</p></div><form className="admin-credentials-form" onSubmit={saveAdminCredentials}><label className="field"><span>Admin name <b>*</b></span><input value={adminName} onChange={(event) => setAdminName(event.target.value)} /></label><label className="field"><span>Admin username <b>*</b></span><input value={adminUsername} onChange={(event) => setAdminUsername(event.target.value)} /></label><label className="field"><span>Current password <b>*</b></span><input type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} placeholder="Required to save changes" /></label><label className="field"><span>New password</span><input type="password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} placeholder="Leave blank to keep current password" /></label>{securityError && <div className="auth-error"><XCircle size={15} /> {securityError}</div>}<button className="button secondary" type="submit"><KeyRound size={16} /> Save admin credentials</button></form></section><div className="team-security-note"><ShieldCheck size={17} /><span><strong>Role boundaries</strong> Admins manage inspector accounts. Inspectors can work inspections but do not see this roster.</span></div></div>;
 }
 
-function Dashboard({ records, onStart, onOpen, onRemove, onLibrary }) {
-  const drafts = records.filter((record) => record.status === 'draft');
+function Dashboard({ records, role, loading, onStart, onOpen, onRemove, onLibrary }) {
+  const isAdmin = role === 'admin';
+  const drafts = isAdmin ? [] : records.filter((record) => record.status === 'draft');
   const completed = records.filter((record) => record.status === 'completed');
   const recent = [...records].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)).slice(0, 5);
   const average = completed.length ? Math.round(completed.reduce((sum, record) => {
@@ -531,35 +562,35 @@ function Dashboard({ records, onStart, onOpen, onRemove, onLibrary }) {
 
   return <div className="page page-dashboard">
     <section className="dashboard-hero">
-      <div className="hero-copy"><div className="eyebrow">REGULATORY WORKSPACE · {formatDate(new Date(), { month: 'long', day: 'numeric', year: 'numeric' })}</div><h1>Make every room<br /><em>count.</em></h1><p>One clear view of facility readiness, from first walkthrough to final sign-off.</p><div className="hero-actions"><button className="button primary" onClick={() => onStart()}><Plus size={17} /> Start an inspection</button><button className="button ghost" onClick={onLibrary}><BookOpen size={16} /> Browse checklists</button></div></div>
+      <div className="hero-copy"><div className="eyebrow">{isAdmin ? 'ADMIN REVIEW DESK' : 'REGULATORY WORKSPACE'} · {formatDate(new Date(), { month: 'long', day: 'numeric', year: 'numeric' })}</div><h1>{isAdmin ? <>Reports that<br /><em>move care.</em></> : <>Make every room<br /><em>count.</em></>}</h1><p>{isAdmin ? 'Receive completed inspections from the field, review the evidence, and generate a print-ready PDF report.' : 'One clear view of facility readiness, from first walkthrough to final sign-off.'}</p><div className="hero-actions">{isAdmin ? <span className="admin-review-badge"><BadgeCheck size={16} /> Inspectors submit · admins issue reports</span> : <><button className="button primary" onClick={() => onStart()}><Plus size={17} /> Start an inspection</button><button className="button ghost" onClick={onLibrary}><BookOpen size={16} /> Browse checklists</button></>}</div></div>
       <div className="hero-drawing" aria-hidden="true"><div className="sun-disc" /><div className="arch arch-one" /><div className="arch arch-two" /><div className="hero-line hero-line-one" /><div className="hero-line hero-line-two" /><div className="hero-stamp"><ClipboardCheck size={22} /><span>ready<br />to review</span></div></div>
     </section>
 
     <section className="stats-row">
-      <StatCard icon={<PencilLine size={17} />} label="Active drafts" value={drafts.length} note={drafts.length ? 'pick up where you left off' : 'nothing waiting in the wings'} tone="aqua" />
-      <StatCard icon={<BadgeCheck size={17} />} label="Completed visits" value={completed.length} note={average === null ? 'your first report is one visit away' : `${average}% average compliance`} tone="gold" />
-      <StatCard icon={<BookOpen size={17} />} label="Templates ready" value={checklistTemplates.length} note="built from supplied source checklists" tone="plum" />
+      <StatCard icon={<PencilLine size={17} />} label={isAdmin ? 'Awaiting review' : 'Active drafts'} value={isAdmin ? completed.length : drafts.length} note={isAdmin ? 'submitted by inspectors' : drafts.length ? 'pick up where you left off' : 'nothing waiting in the wings'} tone="aqua" />
+      <StatCard icon={<BadgeCheck size={17} />} label={isAdmin ? 'Reports ready' : 'Completed visits'} value={completed.length} note={average === null ? 'no submitted reports yet' : `${average}% average compliance`} tone="gold" />
+      <StatCard icon={<BookOpen size={17} />} label={isAdmin ? 'PDF output' : 'Templates ready'} value={isAdmin ? 'READY' : checklistTemplates.length} note={isAdmin ? 'print or save from each report' : 'built from supplied source checklists'} tone="plum" />
       <StatCard icon={<BarChart3 size={17} />} label="Open gaps" value={gaps} note="across completed inspections" tone="coral" />
     </section>
 
     <section className="content-grid dashboard-grid">
       <div className="panel recent-panel">
-        <div className="panel-heading"><div><div className="eyebrow">YOUR FIELD LOG</div><h2>Recent inspections</h2></div><button className="icon-button" aria-label="More options"><MoreHorizontal size={18} /></button></div>
-        {recent.length === 0 ? <EmptyRecent onStart={onStart} /> : <div className="record-list">{recent.map((record) => {
+        <div className="panel-heading"><div><div className="eyebrow">{isAdmin ? 'INSPECTOR SUBMISSIONS' : 'YOUR FIELD LOG'}</div><h2>{isAdmin ? 'Reports received' : 'Recent inspections'}</h2></div><button className="icon-button" aria-label="More options"><MoreHorizontal size={18} /></button></div>
+        {loading ? <div className="empty-state"><div className="empty-icon"><Clock3 size={23} /></div><h3>Loading submitted reports.</h3><p>Connecting to the shared inspection register.</p></div> : recent.length === 0 ? <EmptyRecent onStart={isAdmin ? null : onStart} admin={isAdmin} /> : <div className="record-list">{recent.map((record) => {
           const template = checklistTemplates.find((item) => item.id === record.templateId);
           const stats = getStats(template, record);
           return <div className="record-row" key={record.id} onClick={() => onOpen(record.id)}>
             <IconMark template={template} />
             <div className="record-main"><div className="record-name">{record.metadata.facilityName || 'Untitled facility'}</div><div className="record-sub"><span>{template.title}</span><span className="dot-separator">·</span><span>Edited {formatShortDate(record.updatedAt)}</span></div></div>
-            <div className="record-right"><ScoreChip score={stats.score} /><StatusPill status={record.status} /><button className="delete-button" onClick={(event) => { event.stopPropagation(); onRemove(record.id); }} aria-label="Remove inspection"><Trash2 size={15} /></button></div>
+            <div className="record-right"><ScoreChip score={stats.score} /><StatusPill status={record.status} />{!isAdmin && <button className="delete-button" onClick={(event) => { event.stopPropagation(); onRemove(record.id); }} aria-label="Remove inspection"><Trash2 size={15} /></button>}</div>
           </div>;
         })}</div>}
       </div>
       <div className="panel signal-panel">
-        <div className="panel-heading"><div><div className="eyebrow">INSPECTION RHYTHM</div><h2>Stay in the room</h2></div><div className="mini-orbit"><span /></div></div>
-        <div className="signal-graphic"><div className="signal-circle circle-one" /><div className="signal-circle circle-two" /><div className="signal-center"><HeartPulse size={23} /><strong>{drafts.length ? drafts.length : '—'}</strong><span>visits in motion</span></div></div>
-        <p className="signal-copy">A good audit is part checklist, part conversation. Keep your notes close and your next action visible.</p>
-        <button className="text-button" onClick={() => onStart()}>Open a fresh visit <ArrowRight size={15} /></button>
+        <div className="panel-heading"><div><div className="eyebrow">{isAdmin ? 'REPORT HANDOFF' : 'INSPECTION RHYTHM'}</div><h2>{isAdmin ? 'Issue the record' : 'Stay in the room'}</h2></div><div className="mini-orbit"><span /></div></div>
+        <div className="signal-graphic"><div className="signal-circle circle-one" /><div className="signal-circle circle-two" /><div className="signal-center"><HeartPulse size={23} /><strong>{isAdmin ? completed.length || '—' : drafts.length || '—'}</strong><span>{isAdmin ? 'reports received' : 'visits in motion'}</span></div></div>
+        <p className="signal-copy">{isAdmin ? 'Open any completed inspection to review section scores, gaps, remarks, and generate a PDF for circulation.' : 'A good audit is part checklist, part conversation. Keep your notes close and your next action visible.'}</p>
+        {isAdmin ? <span className="text-button">Select a report above <ArrowRight size={15} /></span> : <button className="text-button" onClick={() => onStart()}>Open a fresh visit <ArrowRight size={15} /></button>}
       </div>
     </section>
   </div>;
@@ -569,8 +600,8 @@ function StatCard({ icon, label, value, note, tone }) {
   return <div className={`stat-card ${tone}`}><div className="stat-icon">{icon}</div><div className="stat-label">{label}</div><div className="stat-value">{value}</div><div className="stat-note">{note}</div></div>;
 }
 
-function EmptyRecent({ onStart }) {
-  return <div className="empty-state"><div className="empty-icon"><FileText size={23} /></div><h3>Your field log is clear.</h3><p>Start your first visit and your inspections will gather here, ready for the next handoff.</p><button className="button secondary" onClick={() => onStart()}><Plus size={15} /> Start first inspection</button></div>;
+function EmptyRecent({ onStart, admin }) {
+  return <div className="empty-state"><div className="empty-icon"><FileText size={23} /></div><h3>{admin ? 'No submitted reports yet.' : 'Your field log is clear.'}</h3><p>{admin ? 'Completed inspections will appear here after an inspector submits a visit.' : 'Start your first visit and your inspections will gather here, ready for the next handoff.'}</p>{onStart && <button className="button secondary" onClick={() => onStart()}><Plus size={15} /> Start first inspection</button>}</div>;
 }
 
 function MissingRecord({ onHome }) {
@@ -667,13 +698,23 @@ function AuditItem({ item, number, response, onStatus, onRemark }) {
   return <article className={`audit-item ${response?.status === 'unmet' || response?.status === 'not-available' ? 'has-gap' : ''}`}><div className="item-number">{String(number).padStart(2, '0')}</div><div className="item-body"><div className="item-topline"><div className="item-labels">{item.severity && <span className={`severity ${item.severity}`}>{item.severity}</span>}{item.optional && <span className="optional-label">Optional</span>}</div><span className="item-type">{item.responseType === 'availability' ? 'Supply / equipment' : 'Standard'}</span></div><h3>{item.text}</h3><div className="response-row">{options.map(([status, label]) => <button key={status} className={`response-button ${status} ${response?.status === status ? 'selected' : ''}`} onClick={() => onStatus(item, status)}>{response?.status === status && <Check size={14} />}{label}</button>)}{item.optional && <button className={`response-button na ${response?.status === 'na' ? 'selected' : ''}`} onClick={() => onStatus(item, 'na')}>{response?.status === 'na' && <Check size={14} />}Not applicable</button>}</div><div className="remark-row"><PencilLine size={14} /><input value={response?.remark || ''} onChange={(event) => onRemark(item, event.target.value)} placeholder="Add a remark, evidence note, or follow-up…" /></div></div></article>;
 }
 
-function Summary({ record, template, onUpdate, onAudit, onReport }) {
+function Summary({ record, template, onUpdate, onAudit, onFinalize, onReport }) {
   const stats = getStats(template, record);
   const canFinalize = stats.unanswered.length === 0;
-  const finalize = () => {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const finalize = async () => {
     if (!canFinalize) return;
-    onUpdate(record.id, { status: 'completed', completedAt: new Date().toISOString() });
-    onReport();
+    setBusy(true);
+    setError('');
+    try {
+      await onFinalize(record);
+      onReport();
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setBusy(false);
+    }
   };
   const returnToGap = () => {
     const first = stats.unanswered[0] || stats.gaps[0];
@@ -682,14 +723,37 @@ function Summary({ record, template, onUpdate, onAudit, onReport }) {
     onAudit();
   };
   return <div className="page page-summary"><PageHeader eyebrow="REVIEW BEFORE SIGN-OFF" title="The readout." description="A quick, honest view of what is ready, what needs attention, and what is still unanswered." action={<button className="button ghost" onClick={onAudit}><ArrowLeft size={16} /> Back to audit</button>} />
-    <div className="summary-top"><div className={`score-hero ${scoreTone(stats.score)}`}><div className="score-ring" style={{ '--score': `${stats.score * 3.6}deg` }}><div><strong>{stats.score}</strong><span>/ 100</span></div></div><div><div className="eyebrow">OVERALL COMPLIANCE</div><h2>{stats.score >= 85 ? 'Strong footing.' : stats.score >= 70 ? 'A few things to tune.' : 'Action is needed.'}</h2><p>{stats.completed} of {stats.total} requirements answered across {template.sections.length} sections.</p></div></div><div className="summary-actions panel"><div className="eyebrow">NEXT STEP</div><h3>{canFinalize ? 'Ready to issue the report.' : `${stats.unanswered.length} required ${stats.unanswered.length === 1 ? 'item remains' : 'items remain'}.`}</h3><p>{canFinalize ? 'Finalize this inspection to lock the visit and open the print-ready report.' : 'Complete every required item before sign-off. Optional items can stay open.'}</p><button className="button primary full" disabled={!canFinalize} onClick={finalize}>{canFinalize ? <><FileCheck2 size={16} /> Finalize & open report</> : <><Clock3 size={16} /> Finish required items first</>}</button>{!canFinalize && <button className="text-button centered" onClick={returnToGap}>Jump to first open item <ArrowRight size={15} /></button>}</div></div>
+    <div className="summary-top"><div className={`score-hero ${scoreTone(stats.score)}`}><div className="score-ring" style={{ '--score': `${stats.score * 3.6}deg` }}><div><strong>{stats.score}</strong><span>/ 100</span></div></div><div><div className="eyebrow">OVERALL COMPLIANCE</div><h2>{stats.score >= 85 ? 'Strong footing.' : stats.score >= 70 ? 'A few things to tune.' : 'Action is needed.'}</h2><p>{stats.completed} of {stats.total} requirements answered across {template.sections.length} sections.</p></div></div><div className="summary-actions panel"><div className="eyebrow">NEXT STEP</div><h3>{canFinalize ? 'Ready to submit to admin.' : `${stats.unanswered.length} required ${stats.unanswered.length === 1 ? 'item remains' : 'items remain'}.`}</h3><p>{canFinalize ? 'Submit this completed inspection to the shared admin review desk, then open the print-ready report.' : 'Complete every required item before sign-off. Optional items can stay open.'}</p>{error && <div className="auth-error"><XCircle size={15} /> {error}</div>}<button className="button primary full" disabled={!canFinalize || busy} onClick={finalize}>{canFinalize ? <><FileCheck2 size={16} /> {busy ? 'Submitting…' : 'Submit & open report'}</> : <><Clock3 size={16} /> Finish required items first</>}</button>{!canFinalize && <button className="text-button centered" onClick={returnToGap}>Jump to first open item <ArrowRight size={15} /></button>}</div></div>
     <div className="summary-columns"><div className="panel section-summary-panel"><div className="panel-heading"><div><div className="eyebrow">SECTION READOUT</div><h2>Where things stand</h2></div><span className="summary-count">{stats.sectionStats.filter((item) => item.unanswered === 0).length}/{stats.sectionStats.length} ready</span></div><div className="summary-section-list">{stats.sectionStats.map((section, index) => <button className="summary-section-row" key={section.id} onClick={() => { onUpdate(record.id, { currentSection: index }); onAudit(); }}><div className={`summary-section-index ${section.unanswered === 0 ? 'done' : ''}`}>{section.unanswered === 0 ? <Check size={15} /> : String(index + 1).padStart(2, '0')}</div><div className="summary-section-name"><strong>{section.title}</strong><span>{section.answered}/{section.total} answered · {section.unanswered ? `${section.unanswered} open` : 'complete'}</span></div><ScoreChip score={section.score} /><ChevronRight size={16} /></button>)}</div></div><div className="panel gap-panel"><div className="panel-heading"><div><div className="eyebrow">ATTENTION MARKERS</div><h2>Gaps to carry forward</h2></div><span className="gap-count">{stats.gaps.length}</span></div>{stats.gaps.length === 0 ? <div className="all-clear"><CheckCircle2 size={26} /><strong>No open gaps.</strong><span>Every assessed requirement is currently met.</span></div> : <div className="gap-list">{stats.gaps.slice(0, 8).map((item) => <div className="gap-row" key={item.id}><div className={`gap-icon ${item.severity || 'unmet'}`}>{item.severity === 'critical' ? '!' : item.severity === 'major' ? '◆' : '·'}</div><div><strong>{item.text}</strong><span>{item.severity ? `${item.severity} · ` : ''}{responseLabel(record.responses[item.id]?.status, item.responseType)}</span></div></div>)}{stats.gaps.length > 8 && <span className="more-gaps">+ {stats.gaps.length - 8} more in report</span>}</div>}</div></div>
   </div>;
 }
 
-function Report({ record, template, onAudit, onSummary }) {
+function Report({ record, template, isAdmin, onAudit, onSummary, onBack }) {
   const stats = getStats(template, record);
-  return <div className="page page-report"><div className="report-toolbar"><button className="back-link" onClick={onSummary}><ArrowLeft size={15} /> Back to summary</button><div className="report-actions"><button className="button ghost" onClick={onAudit}><PencilLine size={16} /> Edit inspection</button><button className="button primary" onClick={() => window.print()}><Printer size={16} /> Print / save PDF</button></div></div><div className="report-sheet"><div className="report-masthead"><div className="report-brand"><div className="brand-symbol"><HeartPulse size={18} /></div><div><div className="brand-name">Care<span>Audit</span></div><div className="brand-caption">facility compliance</div></div></div><div className="report-status"><BadgeCheck size={15} /> FINAL INSPECTION REPORT</div></div><div className="report-heading"><div><div className="eyebrow">{template.title}</div><h1>{record.metadata.facilityName || 'Untitled facility'}</h1><p>{record.metadata.facilityAddress || 'Address not supplied'} · {record.metadata.inspectionType} visit · completed {formatDate(record.completedAt || record.updatedAt)}</p></div><div className={`report-score ${scoreTone(stats.score)}`}><strong>{stats.score}%</strong><span>overall compliance</span></div></div><div className="report-meta-grid"><ReportMeta label="Facility head" value={record.metadata.headName} /><ReportMeta label="Owner / operator" value={record.metadata.ownerName} /><ReportMeta label="License number" value={record.metadata.licenseNo} /><ReportMeta label="Lead assessor" value={record.metadata.assessor} /><ReportMeta label="Contact" value={record.metadata.contact} /><ReportMeta label="Annual patient load" value={record.metadata.annualLoad} /></div><div className="report-callout"><div className="callout-icon"><ShieldCheck size={18} /></div><div><strong>{stats.score >= 85 ? 'Strong footing with targeted follow-up.' : stats.score >= 70 ? 'Compliant in many areas, with follow-up required.' : 'Material gaps require a documented action plan.'}</strong><span>{stats.critical.length} critical markers · {stats.major.length} major markers · {stats.unanswered.length} unanswered requirements</span></div></div><div className="report-section"><div className="report-section-title"><span>01</span><h2>Section scores</h2></div><div className="report-section-table">{stats.sectionStats.map((section) => <div className="report-table-row" key={section.id}><div><strong>{section.title}</strong><span>{section.answered}/{section.total} answered</span></div><div className="report-bar"><span style={{ width: `${section.score}%` }} /></div><ScoreChip score={section.score} /></div>)}</div></div><div className="report-section report-break"><div className="report-section-title"><span>02</span><h2>Attention markers</h2></div>{stats.gaps.length === 0 ? <p className="report-empty">No gaps recorded in this inspection.</p> : <div className="report-gap-table">{stats.gaps.map((item) => <div className="report-gap-row" key={item.id}><span className={`severity ${item.severity || 'unmarked'}`}>{item.severity || 'open'}</span><div><strong>{item.text}</strong><span>{item.sectionTitle} · {responseLabel(record.responses[item.id]?.status, item.responseType)}{record.responses[item.id]?.remark ? ` · ${record.responses[item.id].remark}` : ''}</span></div></div>)}</div>}</div><div className="report-section report-break"><div className="report-section-title"><span>03</span><h2>Assessment detail</h2></div>{template.sections.map((section) => <div className="report-detail-section" key={section.id}><h3>{section.title}</h3>{section.items.map((item) => <div className="detail-row" key={item.id}><span className={`detail-status ${record.responses[item.id]?.status || 'pending'}`} /> <span className="detail-text"><span>{item.text}</span>{record.responses[item.id]?.remark && <small className="detail-remark">Remark: {record.responses[item.id].remark}</small>}</span><span className="detail-response">{responseLabel(record.responses[item.id]?.status, item.responseType)}</span></div>)}</div>)}</div><div className="report-section report-break"><div className="report-section-title"><span>04</span><h2>Visit notes</h2></div><p className="report-notes">{record.metadata.notes || 'No additional visit note was recorded.'}</p><div className="signature-grid"><div><span>Process owner</span><strong>{record.metadata.processOwner || '____________________________'}</strong></div><div><span>Lead assessor</span><strong>{record.metadata.assessor || '____________________________'}</strong></div><div><span>Date</span><strong>{formatDate(record.completedAt || record.updatedAt)}</strong></div></div></div><div className="report-footer"><span>CareAudit · Source checklist: {template.sourceFile}</span><span>Generated {formatDate(new Date())}</span></div></div></div>;
+  const [downloadBusy, setDownloadBusy] = useState(false);
+  const [downloadError, setDownloadError] = useState('');
+  const downloadPdf = async () => {
+    setDownloadBusy(true);
+    setDownloadError('');
+    try {
+      const response = await fetch(`/api/inspections/${encodeURIComponent(record.id)}/pdf`, { credentials: 'include' });
+      if (!response.ok) throw new Error('The PDF could not be generated.');
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `careaudit-${(record.metadata.facilityName || 'inspection').replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      setDownloadError(error.message);
+    } finally {
+      setDownloadBusy(false);
+    }
+  };
+  return <div className="page page-report"><div className="report-toolbar"><button className="back-link" onClick={isAdmin ? onBack : onSummary}><ArrowLeft size={15} /> {isAdmin ? 'Back to submitted reports' : 'Back to summary'}</button><div className="report-actions">{!isAdmin && <button className="button ghost" onClick={onAudit}><PencilLine size={16} /> Edit inspection</button>}{isAdmin ? <button className="button primary" onClick={downloadPdf} disabled={downloadBusy}><FileDown size={16} /> {downloadBusy ? 'Generating…' : 'Download PDF'}</button> : <button className="button primary" onClick={() => window.print()}><Printer size={16} /> Print / save PDF</button>}</div></div>{downloadError && <div className="report-download-error auth-error"><XCircle size={15} /> {downloadError}</div>}<div className="report-sheet"><div className="report-masthead"><div className="report-brand"><div className="brand-symbol"><HeartPulse size={18} /></div><div><div className="brand-name">Care<span>Audit</span></div><div className="brand-caption">facility compliance</div></div></div><div className="report-status"><BadgeCheck size={15} /> FINAL INSPECTION REPORT</div></div><div className="report-heading"><div><div className="eyebrow">{template.title}</div><h1>{record.metadata.facilityName || 'Untitled facility'}</h1><p>{record.metadata.facilityAddress || 'Address not supplied'} · {record.metadata.inspectionType} visit · completed {formatDate(record.completedAt || record.updatedAt)}</p></div><div className={`report-score ${scoreTone(stats.score)}`}><strong>{stats.score}%</strong><span>overall compliance</span></div></div><div className="report-meta-grid"><ReportMeta label="Facility head" value={record.metadata.headName} /><ReportMeta label="Owner / operator" value={record.metadata.ownerName} /><ReportMeta label="License number" value={record.metadata.licenseNo} /><ReportMeta label="Lead assessor" value={record.metadata.assessor} /><ReportMeta label="Contact" value={record.metadata.contact} /><ReportMeta label="Annual patient load" value={record.metadata.annualLoad} /></div><div className="report-callout"><div className="callout-icon"><ShieldCheck size={18} /></div><div><strong>{stats.score >= 85 ? 'Strong footing with targeted follow-up.' : stats.score >= 70 ? 'Compliant in many areas, with follow-up required.' : 'Material gaps require a documented action plan.'}</strong><span>{stats.critical.length} critical markers · {stats.major.length} major markers · {stats.unanswered.length} unanswered requirements</span></div></div><div className="report-section"><div className="report-section-title"><span>01</span><h2>Section scores</h2></div><div className="report-section-table">{stats.sectionStats.map((section) => <div className="report-table-row" key={section.id}><div><strong>{section.title}</strong><span>{section.answered}/{section.total} answered</span></div><div className="report-bar"><span style={{ width: `${section.score}%` }} /></div><ScoreChip score={section.score} /></div>)}</div></div><div className="report-section report-break"><div className="report-section-title"><span>02</span><h2>Attention markers</h2></div>{stats.gaps.length === 0 ? <p className="report-empty">No gaps recorded in this inspection.</p> : <div className="report-gap-table">{stats.gaps.map((item) => <div className="report-gap-row" key={item.id}><span className={`severity ${item.severity || 'unmarked'}`}>{item.severity || 'open'}</span><div><strong>{item.text}</strong><span>{item.sectionTitle} · {responseLabel(record.responses[item.id]?.status, item.responseType)}{record.responses[item.id]?.remark ? ` · ${record.responses[item.id].remark}` : ''}</span></div></div>)}</div>}</div><div className="report-section report-break"><div className="report-section-title"><span>03</span><h2>Assessment detail</h2></div>{template.sections.map((section) => <div className="report-detail-section" key={section.id}><h3>{section.title}</h3>{section.items.map((item) => <div className="detail-row" key={item.id}><span className={`detail-status ${record.responses[item.id]?.status || 'pending'}`} /> <span className="detail-text"><span>{item.text}</span>{record.responses[item.id]?.remark && <small className="detail-remark">Remark: {record.responses[item.id].remark}</small>}</span><span className="detail-response">{responseLabel(record.responses[item.id]?.status, item.responseType)}</span></div>)}</div>)}</div><div className="report-section report-break"><div className="report-section-title"><span>04</span><h2>Visit notes</h2></div><p className="report-notes">{record.metadata.notes || 'No additional visit note was recorded.'}</p><div className="signature-grid"><div><span>Process owner</span><strong>{record.metadata.processOwner || '____________________________'}</strong></div><div><span>Lead assessor</span><strong>{record.metadata.assessor || '____________________________'}</strong></div><div><span>Date</span><strong>{formatDate(record.completedAt || record.updatedAt)}</strong></div></div></div><div className="report-footer"><span>CareAudit · Source checklist: {template.sourceFile}</span><span>Generated {formatDate(new Date())}</span></div></div></div>;
 }
 
 function ReportMeta({ label, value }) { return <div className="report-meta"><span>{label}</span><strong>{value || '—'}</strong></div>; }

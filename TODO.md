@@ -1,9 +1,10 @@
 
 
-## Durable account persistence
+## Inspector submission and admin PDF workflow
 
-- [x] The project has managed server and MySQL database capabilities enabled, with deployment configured through `Dockerfile` and `/api/health`.
-- [x] The server bootstraps durable `careaudit_users` and `careaudit_sessions` tables, seeds the initial admin account as `admin` / `12345678`, and preserves subsequent account edits across restarts.
-- [x] Login, logout, session validation, inspector creation, inspector activation, inspector password reset, and admin credential updates use same-origin server API routes with HTTP-only secure cookies.
-- [x] The standard development command starts Vite and the database API together; the production build and server syntax checks pass; managed diagnostics remain registered.
-- [x] Preview verification confirmed admin login, database-backed inspector creation and roster refresh, and inspector login with the persisted account.
+- [x] Inspectors are the only role that can start, edit, score, and finalize inspection checklists.
+- [x] Completing an inspection submits the full facility metadata, checklist responses, remarks, gaps, and completion timestamp to the shared MySQL inspection register.
+- [x] Admins cannot open the audit workspace, start inspections, edit responses, or access the checklist library; their dashboard is limited to submitted reports and inspector-account management.
+- [x] Admins can open a submitted report in read-only mode and review section scores, gaps, severity markers, remarks, and visit notes.
+- [x] Admins have a real Download PDF action backed by a server-generated PDF endpoint with the facility report, section results, assessment details, remarks, and notes.
+- [x] End-to-end validation confirmed an inspector submission appears in the admin inbox and the PDF endpoint returns a valid multi-page PDF file.
