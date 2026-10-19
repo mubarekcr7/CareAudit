@@ -38,3 +38,10 @@ The Vite production build passes, `/manus-routes.json` and the offline app-shell
 - [x] Inspectors can sign in with their assigned credentials and do not see the admin-only inspector roster or its navigation entry.
 - [x] Role sessions persist locally, passwords are stored as SHA-256 hashes, and the app remains compatible with the offline-ready workspace model.
 - [x] `/team` is included in the route manifest, diagnostics remain registered, the production build passes, and the admin/inspector flow was exercised in Preview.
+
+
+## Default admin credentials
+
+- [x] First-run setup visibly provides the requested default admin username `admin` and password `12345678`.
+- [x] A signed-in admin can change the admin display name, username, and password from Admin Settings, with the current password required and the session preserved after a username change.
+- [x] The changed admin credentials were verified by signing out and signing back in successfully.
