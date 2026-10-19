@@ -17,142 +17,135 @@
             "id": "section-4-item-1"
           },
           {
-            "text": "[ ] Checked",
+            "text": "Quinine tablet and injection",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-2"
           },
           {
-            "text": "Quinine tablet and injection",
+            "text": "Artemether injection",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-3"
           },
           {
-            "text": "Artemether injection",
+            "text": "Artesunate injection",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-4"
           },
           {
-            "text": "Artesunate injection",
+            "text": "Malaria Rapid Test Kit (RDT)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-5"
           },
           {
-            "text": "Malaria Rapid Test Kit (RDT)",
+            "text": "Azithromycin tablet and suspension",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-6"
           },
           {
-            "text": "Azithromycin tablet and suspension",
+            "text": "Antibiotics (Ceftriaxone inj, Tetracycline 250mg cap, Vancomycin, etc.)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-7"
           },
           {
-            "text": "Antibiotics (Ceftriaxone inj, Tetracycline 250mg cap, Vancomycin, etc.)",
+            "text": "Tetanus vaccine (TAT)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-8"
           },
           {
-            "text": "Tetanus vaccine (TAT)",
+            "text": "NPS Drugs (Morphine, Pethidine, Diazepam)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-9"
           },
           {
-            "text": "NPS Drugs (Morphine, Pethidine, Diazepam)",
+            "text": "Insulin injection",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-10"
           },
           {
-            "text": "Insulin injection",
+            "text": "Sildenafil Citrate (different brands)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-11"
           },
           {
-            "text": "Sildenafil Citrate (different brands)",
+            "text": "Mannitol IV fluid",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-12"
           },
           {
-            "text": "Mannitol IV fluid",
+            "text": "Anti-D",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-13"
           },
           {
-            "text": "Anti-D",
+            "text": "Anticancer drugs (Cisplatin, Methotrexate, 5-Fluorouracil)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-14"
           },
           {
-            "text": "Anticancer drugs (Cisplatin, Methotrexate, 5-Fluorouracil)",
+            "text": "PTU",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-15"
           },
           {
-            "text": "PTU",
+            "text": "Warfarin",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-16"
           },
           {
-            "text": "Warfarin",
+            "text": "Glucose 40%",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-17"
           },
           {
-            "text": "Glucose 40%",
+            "text": "Metronidazole injection",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-18"
           },
           {
-            "text": "Metronidazole injection",
-            "responseType": "availability",
-            "optional": false,
-            "severity": "",
-            "id": "section-4-item-19"
-          },
-          {
             "text": "Hepatitis B injection",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-20"
+            "id": "section-4-item-19"
           }
         ]
       }
     ],
-    "itemCount": 20
+    "itemCount": 19
   },
   {
     "id": "dental",
@@ -1197,893 +1190,886 @@
             "id": "section-5-item-1"
           },
           {
-            "text": "[ ]",
+            "text": "Saliva ejector (oral evacuator system)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-2"
           },
           {
-            "text": "Saliva ejector (oral evacuator system)",
+            "text": "Dental Chair",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-3"
           },
           {
-            "text": "Dental Chair",
+            "text": "Operator's stool",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-4"
           },
           {
-            "text": "Operator's stool",
-            "responseType": "availability",
-            "optional": false,
-            "severity": "",
-            "id": "section-5-item-5"
-          },
-          {
             "text": "Assistant stool (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-6"
+            "id": "section-5-item-5"
           },
           {
             "text": "Dental mirror",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-7"
+            "id": "section-5-item-6"
           },
           {
             "text": "Cotton pliers",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-8"
+            "id": "section-5-item-7"
           },
           {
             "text": "Explorers",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-9"
+            "id": "section-5-item-8"
           },
           {
             "text": "Periodontal probe",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-10"
+            "id": "section-5-item-9"
           },
           {
             "text": "Instrument Tray",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-11"
+            "id": "section-5-item-10"
           },
           {
             "text": "Dental floss",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-12"
+            "id": "section-5-item-11"
           },
           {
             "text": "Articulating paper",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-13"
+            "id": "section-5-item-12"
           },
           {
             "text": "Wedge",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-14"
+            "id": "section-5-item-13"
           },
           {
             "text": "Paper pad / glass slab",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-15"
+            "id": "section-5-item-14"
           },
           {
             "text": "Cotton ball / gauze",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-16"
+            "id": "section-5-item-15"
           },
           {
             "text": "Rubber dam equipment (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-17"
+            "id": "section-5-item-16"
           },
           {
             "text": "Burnisher (ball type, football type, interproximal type) (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-18"
+            "id": "section-5-item-17"
           },
           {
             "text": "Curver",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-19"
+            "id": "section-5-item-18"
           },
           {
             "text": "Trimmers (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-20"
+            "id": "section-5-item-19"
           },
           {
             "text": "Amalgam carriers (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-21"
+            "id": "section-5-item-20"
           },
           {
             "text": "Light curing unit with composite materials",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-22"
+            "id": "section-5-item-21"
           },
           {
             "text": "Matrix retainer",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-23"
+            "id": "section-5-item-22"
           },
           {
             "text": "Spatula",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-24"
+            "id": "section-5-item-23"
           },
           {
             "text": "Core and post (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-25"
+            "id": "section-5-item-24"
           },
           {
             "text": "Kit for friction lock retention pin",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-26"
+            "id": "section-5-item-25"
           },
           {
             "text": "Mortar and pestle (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-27"
+            "id": "section-5-item-26"
           },
           {
             "text": "Matrix band and retainer (metallic & celluloid, different sizes)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-28"
+            "id": "section-5-item-27"
           },
           {
             "text": "Materials & instruments to keep area free from moisture & improve visibility",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-29"
+            "id": "section-5-item-28"
           },
           {
             "text": "Millimeter ruler (Endo block)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-30"
+            "id": "section-5-item-29"
           },
           {
             "text": "Reamer",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-31"
+            "id": "section-5-item-30"
           },
           {
             "text": "Gates Glidden drills (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-32"
+            "id": "section-5-item-31"
           },
           {
             "text": "Spreaders (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-33"
+            "id": "section-5-item-32"
           },
           {
             "text": "Endodontic measuring Gauge (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-34"
+            "id": "section-5-item-33"
           },
           {
             "text": "Rotary endodontic (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-35"
+            "id": "section-5-item-34"
           },
           {
             "text": "Apex locator (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-36"
+            "id": "section-5-item-35"
           },
           {
             "text": "Paper points",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-37"
+            "id": "section-5-item-36"
           },
           {
             "text": "Guttapercha points (1 to 12)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-38"
+            "id": "section-5-item-37"
           },
           {
             "text": "Endodontic kits",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-39"
+            "id": "section-5-item-38"
           },
           {
             "text": "Periosteal elevator",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-40"
+            "id": "section-5-item-39"
           },
           {
             "text": "Tongue depressor",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-41"
+            "id": "section-5-item-40"
           },
           {
             "text": "Surgical curette",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-42"
+            "id": "section-5-item-41"
           },
           {
             "text": "Mouth probe (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-43"
+            "id": "section-5-item-42"
           },
           {
             "text": "Cheek retractor (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-44"
+            "id": "section-5-item-43"
           },
           {
             "text": "Hemostats",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-45"
+            "id": "section-5-item-44"
           },
           {
             "text": "Tissue forceps (toothed and non-toothed)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-46"
+            "id": "section-5-item-45"
           },
           {
             "text": "Hammer (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-47"
+            "id": "section-5-item-46"
           },
           {
             "text": "Chisel (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-48"
+            "id": "section-5-item-47"
           },
           {
             "text": "Osteotome (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-49"
+            "id": "section-5-item-48"
           },
           {
             "text": "Micro motor with hand piece and burs",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-50"
+            "id": "section-5-item-49"
           },
           {
             "text": "Surgical burs",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-51"
+            "id": "section-5-item-50"
           },
           {
             "text": "Bone file",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-52"
+            "id": "section-5-item-51"
           },
           {
             "text": "Needle holder",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-53"
+            "id": "section-5-item-52"
           },
           {
             "text": "Stitch scissors",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-54"
+            "id": "section-5-item-53"
           },
           {
             "text": "Arch bar and wire",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-55"
+            "id": "section-5-item-54"
           },
           {
             "text": "Wire cutter",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-56"
+            "id": "section-5-item-55"
           },
           {
             "text": "Wire twister (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-57"
+            "id": "section-5-item-56"
           },
           {
             "text": "Ligature scissors (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-58"
+            "id": "section-5-item-57"
           },
           {
             "text": "Surgical / tissue scissors",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-59"
+            "id": "section-5-item-58"
           },
           {
             "text": "Local anesthetic equipment",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-60"
+            "id": "section-5-item-59"
           },
           {
             "text": "Root elevators",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-61"
+            "id": "section-5-item-60"
           },
           {
             "text": "Forceps for Dental Extractions (Deciduous & Permanent teeth)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-62"
+            "id": "section-5-item-61"
           },
           {
             "text": "Dental elevators (root, straight, curved, crier)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-63"
+            "id": "section-5-item-62"
           },
           {
             "text": "Brushes (polishing cap)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-64"
+            "id": "section-5-item-63"
           },
           {
             "text": "Polishing pastes",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-65"
+            "id": "section-5-item-64"
           },
           {
             "text": "Retraction cord (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-66"
+            "id": "section-5-item-65"
           },
           {
             "text": "Retraction cord pliers (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-67"
+            "id": "section-5-item-66"
           },
           {
             "text": "Cement spatula",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-68"
+            "id": "section-5-item-67"
           },
           {
             "text": "Metal or plastic bite sticks",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-69"
+            "id": "section-5-item-68"
           },
           {
             "text": "Shade guide",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-70"
+            "id": "section-5-item-69"
           },
           {
             "text": "Alginate",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-71"
+            "id": "section-5-item-70"
           },
           {
             "text": "Dental cements",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-72"
+            "id": "section-5-item-71"
           },
           {
             "text": "Gypsum or dental stone",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-73"
+            "id": "section-5-item-72"
           },
           {
             "text": "Crown remover",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-74"
+            "id": "section-5-item-73"
           },
           {
             "text": "Impression Trays for upper & lower jaws",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-75"
+            "id": "section-5-item-74"
           },
           {
             "text": "Sand paper",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-76"
+            "id": "section-5-item-75"
           },
           {
             "text": "Wax",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-77"
+            "id": "section-5-item-76"
           },
           {
             "text": "Wax knife",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-78"
+            "id": "section-5-item-77"
           },
           {
             "text": "Bunsen burner (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-79"
+            "id": "section-5-item-78"
           },
           {
             "text": "Finishing discs",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-80"
+            "id": "section-5-item-79"
           },
           {
             "text": "Abrasive stones",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-81"
+            "id": "section-5-item-80"
           },
           {
             "text": "Rubber bowl",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-82"
+            "id": "section-5-item-81"
           },
           {
             "text": "Preformed temporary stainless steel & polycarbonate crowns",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-83"
+            "id": "section-5-item-82"
           },
           {
             "text": "Band adapter",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-84"
+            "id": "section-5-item-83"
           },
           {
             "text": "Howly / utility pliers",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-85"
+            "id": "section-5-item-84"
           },
           {
             "text": "Bird-beak pliers",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-86"
+            "id": "section-5-item-85"
           },
           {
             "text": "Universal plier",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-87"
+            "id": "section-5-item-86"
           },
           {
             "text": "Bracket holding pliers",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-88"
+            "id": "section-5-item-87"
           },
           {
             "text": "Nancy plier",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-89"
+            "id": "section-5-item-88"
           },
           {
             "text": "Elastic separating applying pliers",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-90"
+            "id": "section-5-item-89"
           },
           {
             "text": "Ligature director",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-91"
+            "id": "section-5-item-90"
           },
           {
             "text": "Pin & ligature cutter",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-92"
+            "id": "section-5-item-91"
           },
           {
             "text": "Distal end cutter",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-93"
+            "id": "section-5-item-92"
           },
           {
             "text": "Mathieu (needle holder)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-94"
+            "id": "section-5-item-93"
           },
           {
             "text": "Adams plier",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-95"
+            "id": "section-5-item-94"
           },
           {
             "text": "Hard wire cutter",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-96"
+            "id": "section-5-item-95"
           },
           {
             "text": "Band contouring plier",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-97"
+            "id": "section-5-item-96"
           },
           {
             "text": "Light orthodontic wire cutter",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-98"
+            "id": "section-5-item-97"
           },
           {
             "text": "Orthodontic wires (0.5 to 0.9 gauges)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-99"
+            "id": "section-5-item-98"
           },
           {
             "text": "Lingual attachments",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-100"
+            "id": "section-5-item-99"
           },
           {
             "text": "Polishing, finishing and re-contouring burs",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-101"
+            "id": "section-5-item-100"
           },
           {
             "text": "Flowable composites cheek retractor",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-102"
+            "id": "section-5-item-101"
           },
           {
             "text": "Open / Closed coil springs",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-103"
+            "id": "section-5-item-102"
           },
           {
             "text": "IPR strip or bur",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-104"
+            "id": "section-5-item-103"
           },
           {
             "text": "Buccal tubes",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-105"
+            "id": "section-5-item-104"
           },
           {
             "text": "Preformed orthodontic bands & brackets",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-106"
+            "id": "section-5-item-105"
           },
           {
             "text": "Arch wires (Niti & Stainless steel in various dimensions)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-107"
+            "id": "section-5-item-106"
           },
           {
             "text": "Elastic modules & chains",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-108"
+            "id": "section-5-item-107"
           },
           {
             "text": "Inter-maxillary elastics",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-109"
+            "id": "section-5-item-108"
           },
           {
             "text": "Ligature wire",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-110"
+            "id": "section-5-item-109"
           },
           {
             "text": "View box / Negatoscope (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-111"
+            "id": "section-5-item-110"
           },
           {
             "text": "Film processing",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-112"
+            "id": "section-5-item-111"
           },
           {
             "text": "Lead Apron",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-113"
+            "id": "section-5-item-112"
           },
           {
             "text": "Amalgam mixing machine (Amalgamatory) (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-114"
+            "id": "section-5-item-113"
           },
           {
             "text": "Operatory cabinets (mobile/fixed), Drum",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-115"
+            "id": "section-5-item-114"
           },
           {
             "text": "Thermometer, Measuring tape (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-116"
+            "id": "section-5-item-115"
           },
           {
             "text": "BP apparatus with stethoscope",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-117"
+            "id": "section-5-item-116"
           },
           {
             "text": "Pulse oximetry",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-118"
+            "id": "section-5-item-117"
           },
           {
             "text": "Air compressor",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-119"
+            "id": "section-5-item-118"
           },
           {
             "text": "Mandrels, Carborundum, Silica, Crocus discs and stones",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-120"
+            "id": "section-5-item-119"
           },
           {
             "text": "Autoclave (Superheated steam under pressure)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-121"
+            "id": "section-5-item-120"
           },
           {
             "text": "Dry heat sterilization / Oven (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-122"
+            "id": "section-5-item-121"
           },
           {
             "text": "Ultrasonic cleaner system (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-5-item-123"
+            "id": "section-5-item-122"
           },
           {
             "text": "Disinfection pans",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-124"
+            "id": "section-5-item-123"
           },
           {
             "text": "Indicator test strips",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-125"
+            "id": "section-5-item-124"
           },
           {
             "text": "Disposable syringes",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-126"
+            "id": "section-5-item-125"
           },
           {
             "text": "Local anesthesia (Spray, Lidocaine multi-dose, Cartridges with/without adrenaline)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-127"
+            "id": "section-5-item-126"
           },
           {
             "text": "Gloves",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-128"
+            "id": "section-5-item-127"
           }
         ]
       },
@@ -2407,7 +2393,7 @@
         ]
       }
     ],
-    "itemCount": 219
+    "itemCount": 218
   },
   {
     "id": "medium",
@@ -2817,326 +2803,319 @@
             "id": "section-4-item-1"
           },
           {
-            "text": "[ ]",
+            "text": "Weighing scale",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-2"
           },
           {
-            "text": "Weighing scale",
+            "text": "Infantometer & height scale",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-3"
           },
           {
-            "text": "Infantometer & height scale",
+            "text": "Otoscope",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-4"
           },
           {
-            "text": "Otoscope",
+            "text": "Ophthalmoscope",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-5"
           },
           {
-            "text": "Ophthalmoscope",
+            "text": "Reflex hammer",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-6"
           },
           {
-            "text": "Reflex hammer",
+            "text": "Fetostethoscope",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-7"
           },
           {
-            "text": "Fetostethoscope",
+            "text": "Snellen's Chart",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-8"
           },
           {
-            "text": "Snellen's Chart",
+            "text": "Tuning fork (500 Hz)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-9"
           },
           {
-            "text": "Tuning fork (500 Hz)",
+            "text": "Kick buckets",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-10"
           },
           {
-            "text": "Kick buckets",
+            "text": "Tongue depressors",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-11"
           },
           {
-            "text": "Tongue depressors",
+            "text": "Cabinets and shelves",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-12"
           },
           {
-            "text": "Cabinets and shelves",
+            "text": "Wall clock / Time clock",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-13"
           },
           {
-            "text": "Wall clock / Time clock",
+            "text": "Delivery set",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-14"
           },
           {
-            "text": "Delivery set",
+            "text": "Enema set",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-15"
           },
           {
-            "text": "Enema set",
+            "text": "Vaginal Specula (different sizes)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-16"
           },
           {
-            "text": "Vaginal Specula (different sizes)",
+            "text": "Pickup forceps with jar",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-17"
           },
           {
-            "text": "Pickup forceps with jar",
+            "text": "Sterilization drums",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-18"
           },
           {
-            "text": "Sterilization drums",
+            "text": "Kidney dishes",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-19"
           },
           {
-            "text": "Kidney dishes",
+            "text": "Instrument tray & trolley",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-20"
           },
           {
-            "text": "Instrument tray & trolley",
+            "text": "Ear irrigation syringe",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-21"
           },
           {
-            "text": "Ear irrigation syringe",
+            "text": "Packing nasal forceps",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-22"
           },
           {
-            "text": "Packing nasal forceps",
+            "text": "Steri-strip for steam autoclave",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-23"
           },
           {
-            "text": "Steri-strip for steam autoclave",
-            "responseType": "availability",
-            "optional": false,
-            "severity": "",
-            "id": "section-4-item-24"
-          },
-          {
             "text": "Lumbar puncture set (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-4-item-25"
+            "id": "section-4-item-24"
           },
           {
             "text": "IV Infusion stand",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-26"
+            "id": "section-4-item-25"
           },
           {
             "text": "Sterilizer (steam and/or dry)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-27"
+            "id": "section-4-item-26"
           },
           {
             "text": "Refrigerator #2 (LAB & Treatment room)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-28"
+            "id": "section-4-item-27"
           },
           {
             "text": "Oxygen equipment with all accessories",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-29"
+            "id": "section-4-item-28"
           },
           {
             "text": "Binocular Microscope #1",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-30"
+            "id": "section-4-item-29"
           },
           {
             "text": "Chamber #1",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-31"
+            "id": "section-4-item-30"
           },
           {
             "text": "Differential counter #1",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-32"
+            "id": "section-4-item-31"
           },
           {
             "text": "Tally counter #1",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-33"
+            "id": "section-4-item-32"
           },
           {
             "text": "Centrifuge #1",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-34"
+            "id": "section-4-item-33"
           },
           {
             "text": "Timer #2",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-35"
+            "id": "section-4-item-34"
           },
           {
             "text": "Refrigerator with thermometer #1",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-36"
+            "id": "section-4-item-35"
           },
           {
             "text": "Test tube rack #5",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-37"
+            "id": "section-4-item-36"
           },
           {
             "text": "ESR rack of five #2",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-38"
+            "id": "section-4-item-37"
           },
           {
             "text": "ESR tubes #12",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-39"
+            "id": "section-4-item-38"
           },
           {
             "text": "Spirit lamp #1",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-40"
+            "id": "section-4-item-39"
           },
           {
             "text": "Slides & Cover Slides",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-41"
+            "id": "section-4-item-40"
           },
           {
             "text": "Reagents",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-42"
+            "id": "section-4-item-41"
           },
           {
             "text": "Dry oven / Autoclave",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-43"
+            "id": "section-4-item-42"
           },
           {
             "text": "Spectrophotometer (semi-automated)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-44"
+            "id": "section-4-item-43"
           },
           {
             "text": "Shaker #1",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-45"
+            "id": "section-4-item-44"
           },
           {
             "text": "Roller #1",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-46"
+            "id": "section-4-item-45"
           },
           {
             "text": "Water bath #1",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-47"
+            "id": "section-4-item-46"
           }
         ]
       },
@@ -3152,149 +3131,142 @@
             "id": "section-5-item-1"
           },
           {
-            "text": "[ ]",
+            "text": "Large garbage bins",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-2"
           },
           {
-            "text": "Large garbage bins",
+            "text": "Plastic garbage bags",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-3"
           },
           {
-            "text": "Plastic garbage bags",
+            "text": "Boiler",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-4"
           },
           {
-            "text": "Boiler",
+            "text": "Oven",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-5"
           },
           {
-            "text": "Oven",
+            "text": "Storage shelves for medical equipment",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-6"
           },
           {
-            "text": "Storage shelves for medical equipment",
+            "text": "Chemicals & disinfectants (0.5% chlorine solution)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-7"
           },
           {
-            "text": "Chemicals & disinfectants (0.5% chlorine solution)",
+            "text": "Brushes (for small items)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-8"
           },
           {
-            "text": "Brushes (for small items)",
+            "text": "Soap dispenser",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-9"
           },
           {
-            "text": "Soap dispenser",
+            "text": "Alcohol-based hand rub",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-10"
           },
           {
-            "text": "Alcohol-based hand rub",
+            "text": "Personal towels",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-11"
           },
           {
-            "text": "Personal towels",
+            "text": "Cleaning cloth",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-12"
           },
           {
-            "text": "Cleaning cloth",
+            "text": "Detergent & Bleach",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-13"
           },
           {
-            "text": "Detergent & Bleach",
+            "text": "Latex or Nitrile gloves",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-14"
           },
           {
-            "text": "Latex or Nitrile gloves",
+            "text": "Eye shield & Goggles",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-15"
           },
           {
-            "text": "Eye shield & Goggles",
+            "text": "Visors & Face shields",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-16"
           },
           {
-            "text": "Visors & Face shields",
+            "text": "Dust mask & Respirator",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-17"
           },
           {
-            "text": "Dust mask & Respirator",
+            "text": "Plastic apron",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-18"
           },
           {
-            "text": "Plastic apron",
+            "text": "Boots / Protective shoes",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-19"
           },
           {
-            "text": "Boots / Protective shoes",
-            "responseType": "availability",
-            "optional": false,
-            "severity": "",
-            "id": "section-5-item-20"
-          },
-          {
             "text": "Caps",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-21"
+            "id": "section-5-item-20"
           }
         ]
       }
     ],
-    "itemCount": 122
+    "itemCount": 120
   },
   {
     "id": "physio",
@@ -3487,81 +3459,74 @@
             "id": "section-4-item-1"
           },
           {
-            "text": "[ ]",
+            "text": "Goniometer",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-2"
           },
           {
-            "text": "Goniometer",
+            "text": "Tape measure",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-3"
           },
           {
-            "text": "Tape measure",
+            "text": "Reflex hammer",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-4"
           },
           {
-            "text": "Reflex hammer",
+            "text": "Thermometer",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-5"
           },
           {
-            "text": "Thermometer",
+            "text": "Blood pressure cuff (digital or manual)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-6"
           },
           {
-            "text": "Blood pressure cuff (digital or manual)",
+            "text": "Weighing scale",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-7"
           },
           {
-            "text": "Weighing scale",
+            "text": "Stethoscope",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-8"
           },
           {
-            "text": "Stethoscope",
+            "text": "Disposable glove",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-9"
           },
           {
-            "text": "Disposable glove",
+            "text": "Pulse oximeter",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-10"
           },
           {
-            "text": "Pulse oximeter",
-            "responseType": "availability",
-            "optional": false,
-            "severity": "",
-            "id": "section-4-item-11"
-          },
-          {
             "text": "Sensation testing tool",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-12"
+            "id": "section-4-item-11"
           }
         ]
       },
@@ -3577,53 +3542,46 @@
             "id": "section-5-item-1"
           },
           {
-            "text": "[ ]",
+            "text": "Wheelchair",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-2"
           },
           {
-            "text": "Wheelchair",
+            "text": "Physio ball (one big and one small size)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-3"
           },
           {
-            "text": "Physio ball (one big and one small size)",
+            "text": "Stationary Bike",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-4"
           },
           {
-            "text": "Stationary Bike",
+            "text": "Adjustable parallel bar",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-5"
           },
           {
-            "text": "Adjustable parallel bar",
+            "text": "Different resistance TheraBand",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-5-item-6"
           },
           {
-            "text": "Different resistance TheraBand",
-            "responseType": "availability",
-            "optional": false,
-            "severity": "",
-            "id": "section-5-item-7"
-          },
-          {
             "text": "Correction Mirror",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-5-item-8"
+            "id": "section-5-item-7"
           }
         ]
       },
@@ -3639,158 +3597,151 @@
             "id": "section-10-item-1"
           },
           {
-            "text": "[ ]",
+            "text": "Medicine balls",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-2"
           },
           {
-            "text": "Medicine balls",
+            "text": "Inclinometer",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-3"
           },
           {
-            "text": "Inclinometer",
+            "text": "Foam roller or bolsters",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-4"
           },
           {
-            "text": "Foam roller or bolsters",
+            "text": "Dynamometer",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-5"
           },
           {
-            "text": "Dynamometer",
+            "text": "Treadmill",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-6"
           },
           {
-            "text": "Treadmill",
+            "text": "Adjustable overhead pulleys",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-7"
           },
           {
-            "text": "Adjustable overhead pulleys",
+            "text": "Cervical & lumbar traction set",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-8"
           },
           {
-            "text": "Cervical & lumbar traction set",
+            "text": "Adjustable height exercise steps",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-9"
           },
           {
-            "text": "Adjustable height exercise steps",
+            "text": "Gait belts",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-10"
           },
           {
-            "text": "Gait belts",
+            "text": "Fixed Wall bars",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-11"
           },
           {
-            "text": "Fixed Wall bars",
+            "text": "Trigger point releasers",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-12"
           },
           {
-            "text": "Trigger point releasers",
+            "text": "Free weights / Dumbbells in pairs",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-13"
           },
           {
-            "text": "Free weights / Dumbbells in pairs",
+            "text": "Cotton rolls, POP, gauze bandage, POP scissors",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-14"
           },
           {
-            "text": "Cotton rolls, POP, gauze bandage, POP scissors",
+            "text": "Weight Cuff weights (paired weights)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-15"
           },
           {
-            "text": "Weight Cuff weights (paired weights)",
+            "text": "Elastic / ACE wrap bandage",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-16"
           },
           {
-            "text": "Elastic / ACE wrap bandage",
+            "text": "Nerve conduction test (NCT)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-17"
           },
           {
-            "text": "Nerve conduction test (NCT)",
+            "text": "Neurological testing instruments (monofilament)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-18"
           },
           {
-            "text": "Neurological testing instruments (monofilament)",
+            "text": "Electromyography (EMG)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-19"
           },
           {
-            "text": "Electromyography (EMG)",
+            "text": "Multi Gym Equipment",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-20"
           },
           {
-            "text": "Multi Gym Equipment",
+            "text": "Prosthesis & Orthotics Workshop tools: Oven, Bench vice, Leather sewing machine, Tool case, Vacuum pump, Scissor, Grinder stand, Hack saw, Suction (dust aspirator), Drill conical, Bench Drill, Riveting bar, Jig saw, Safety equipment, Saw oscillating (cast cutter), Glove (PU coated), Heat gun, Sand drum, Welding Iron, Contouring instrument (Bender), Welding mirror, Revolving Hole puncher, Measuring tape, Caliper gauge, Rivet setter",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-10-item-21"
           },
           {
-            "text": "Prosthesis & Orthotics Workshop tools: Oven, Bench vice, Leather sewing machine, Tool case, Vacuum pump, Scissor, Grinder stand, Hack saw, Suction (dust aspirator), Drill conical, Bench Drill, Riveting bar, Jig saw, Safety equipment, Saw oscillating (cast cutter), Glove (PU coated), Heat gun, Sand drum, Welding Iron, Contouring instrument (Bender), Welding mirror, Revolving Hole puncher, Measuring tape, Caliper gauge, Rivet setter",
-            "responseType": "availability",
-            "optional": false,
-            "severity": "",
-            "id": "section-10-item-22"
-          },
-          {
             "text": "Consumables for Prosthesis & Orthotics: EVA, Indelible pencil, Homopolymer (PP), Plaster mixing bowl, Gypsum Powder, Velcro, Stanley surform, Glue, Sewing needles, Foot (different size), Ring half round (D-Ring), Module system, Knife (cutter), Ankle/Knee/Hip joint, Rivet tubular iron, Side bar, Copper rivet, Cotton stockinet, Sand paper, Cast cutter blade, Jig saw blade, Hack saw blade, Drill bit",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-10-item-23"
+            "id": "section-10-item-22"
           }
         ]
       },
@@ -3806,137 +3757,130 @@
             "id": "section-11-item-1"
           },
           {
-            "text": "[ ]",
+            "text": "Ceiling brush",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-11-item-2"
           },
           {
-            "text": "Ceiling brush",
+            "text": "Glass cleaning / wiping brush",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-11-item-3"
           },
           {
-            "text": "Glass cleaning / wiping brush",
+            "text": "Scrappers",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-11-item-4"
           },
           {
-            "text": "Scrappers",
+            "text": "Dustbins paddles",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-11-item-5"
           },
           {
-            "text": "Dustbins paddles",
+            "text": "Plastic Mug",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-11-item-6"
           },
           {
-            "text": "Plastic Mug",
+            "text": "Plastic Bucket",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-11-item-7"
           },
           {
-            "text": "Plastic Bucket",
+            "text": "Plastic drum",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-11-item-8"
           },
           {
-            "text": "Plastic drum",
+            "text": "Wheel barrow",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-11-item-9"
           },
           {
-            "text": "Wheel barrow",
+            "text": "Water trolley",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-11-item-10"
           },
           {
-            "text": "Water trolley",
+            "text": "Ladder",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-11-item-11"
           },
           {
-            "text": "Ladder",
-            "responseType": "availability",
-            "optional": false,
-            "severity": "",
-            "id": "section-11-item-12"
-          },
-          {
             "text": "Scraping pump (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-11-item-13"
+            "id": "section-11-item-12"
           },
           {
             "text": "Spraying pump (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-11-item-14"
+            "id": "section-11-item-13"
           },
           {
             "text": "Flit pump",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-11-item-15"
+            "id": "section-11-item-14"
           },
           {
             "text": "Rat trapping cage",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-11-item-16"
+            "id": "section-11-item-15"
           },
           {
             "text": "Bed pan washer",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-11-item-17"
+            "id": "section-11-item-16"
           },
           {
             "text": "Broom",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-11-item-18"
+            "id": "section-11-item-17"
           },
           {
             "text": "Dust mop",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-11-item-19"
+            "id": "section-11-item-18"
           },
           {
             "text": "Cleaning towel",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-11-item-20"
+            "id": "section-11-item-19"
           }
         ]
       },
@@ -3952,100 +3896,93 @@
             "id": "section-12-item-1"
           },
           {
-            "text": "[ ]",
+            "text": "Examination glove",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-12-item-2"
           },
           {
-            "text": "Examination glove",
+            "text": "Goggle",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-12-item-3"
           },
           {
-            "text": "Goggle",
+            "text": "Different masks",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-12-item-4"
           },
           {
-            "text": "Different masks",
+            "text": "Hand washing sinks (all service areas)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-12-item-5"
           },
           {
-            "text": "Hand washing sinks (all service areas)",
+            "text": "Tap water / water container with faucet",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-12-item-6"
           },
           {
-            "text": "Tap water / water container with faucet",
+            "text": "Soap",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-12-item-7"
           },
           {
-            "text": "Soap",
+            "text": "Alcohol-based hand rub",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-12-item-8"
           },
           {
-            "text": "Alcohol-based hand rub",
+            "text": "Paper towels",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-12-item-9"
           },
           {
-            "text": "Paper towels",
+            "text": "Head cover",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-12-item-10"
           },
           {
-            "text": "Head cover",
+            "text": "Plastic apron",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-12-item-11"
           },
           {
-            "text": "Plastic apron",
+            "text": "Boots",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-12-item-12"
           },
           {
-            "text": "Boots",
-            "responseType": "availability",
-            "optional": false,
-            "severity": "",
-            "id": "section-12-item-13"
-          },
-          {
             "text": "Face shield",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-12-item-14"
+            "id": "section-12-item-13"
           }
         ]
       }
     ],
-    "itemCount": 100
+    "itemCount": 95
   },
   {
     "id": "primary",
@@ -4182,207 +4119,200 @@
             "id": "section-4-item-2"
           },
           {
-            "text": "[ ]",
+            "text": "Large garbage bin",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-3"
           },
           {
-            "text": "Large garbage bin",
+            "text": "Plastic garbage bags",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-4"
           },
           {
-            "text": "Plastic garbage bags",
+            "text": "Broom",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-5"
           },
           {
-            "text": "Broom",
+            "text": "Dust mop",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-6"
           },
           {
-            "text": "Dust mop",
+            "text": "Cleaning cloth",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-7"
           },
           {
-            "text": "Cleaning cloth",
+            "text": "Detergent",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-8"
           },
           {
-            "text": "Detergent",
+            "text": "Bleach",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-9"
           },
           {
-            "text": "Bleach",
+            "text": "Boiler",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-10"
           },
           {
-            "text": "Boiler",
+            "text": "Oven",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-11"
           },
           {
-            "text": "Oven",
+            "text": "Storage shelves for medical equipment",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-12"
           },
           {
-            "text": "Storage shelves for medical equipment",
+            "text": "Chemicals & disinfectants (0.5% chlorine solution)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-13"
           },
           {
-            "text": "Chemicals & disinfectants (0.5% chlorine solution)",
+            "text": "Brushes (toothbrush for small items)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-14"
           },
           {
-            "text": "Brushes (toothbrush for small items)",
+            "text": "Soap dispenser",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-15"
           },
           {
-            "text": "Soap dispenser",
+            "text": "Alcohol based hand rub",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-16"
           },
           {
-            "text": "Alcohol based hand rub",
+            "text": "Personal Towels",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-17"
           },
           {
-            "text": "Personal Towels",
+            "text": "Paper Towels",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-18"
           },
           {
-            "text": "Paper Towels",
+            "text": "Latex or Nitrile glove",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-19"
           },
           {
-            "text": "Latex or Nitrile glove",
+            "text": "Eye shield",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-20"
           },
           {
-            "text": "Eye shield",
+            "text": "Goggle",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-21"
           },
           {
-            "text": "Goggle",
+            "text": "Visors",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-22"
           },
           {
-            "text": "Visors",
+            "text": "Dust mask",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-23"
           },
           {
-            "text": "Dust mask",
+            "text": "Respiratory mask",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-24"
           },
           {
-            "text": "Respiratory mask",
+            "text": "Other types of face mask",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-25"
           },
           {
-            "text": "Other types of face mask",
+            "text": "Plastic apron",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-26"
           },
           {
-            "text": "Plastic apron",
+            "text": "Boots",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-27"
           },
           {
-            "text": "Boots",
+            "text": "Other protective shoes",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-28"
           },
           {
-            "text": "Other protective shoes",
+            "text": "Caps",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-4-item-29"
           },
           {
-            "text": "Caps",
-            "responseType": "availability",
-            "optional": false,
-            "severity": "",
-            "id": "section-4-item-30"
-          },
-          {
             "text": "Face shield",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-4-item-31"
+            "id": "section-4-item-30"
           }
         ]
       },
@@ -4446,296 +4376,289 @@
             "id": "section-6-item-1"
           },
           {
-            "text": "[ ]",
+            "text": "Measuring tape",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-2"
           },
           {
-            "text": "Measuring tape",
+            "text": "Wrist watch / wall clock",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-3"
           },
           {
-            "text": "Wrist watch / wall clock",
+            "text": "Weighing scale",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-4"
           },
           {
-            "text": "Weighing scale",
+            "text": "Otoscope set",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-5"
           },
           {
-            "text": "Otoscope set",
+            "text": "Glucometer",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-6"
           },
           {
-            "text": "Glucometer",
+            "text": "Examination light",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-7"
           },
           {
-            "text": "Examination light",
+            "text": "Delivery set",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-8"
           },
           {
-            "text": "Delivery set",
+            "text": "Dressing set",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-9"
           },
           {
-            "text": "Dressing set",
+            "text": "Minor suturing set",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-10"
           },
           {
-            "text": "Minor suturing set",
+            "text": "Enema set",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-11"
           },
           {
-            "text": "Enema set",
+            "text": "Kidney basin",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-12"
           },
           {
-            "text": "Kidney basin",
+            "text": "Plastic apron",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-13"
           },
           {
-            "text": "Plastic apron",
+            "text": "Drapes / Rubber sheets",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-14"
           },
           {
-            "text": "Drapes / Rubber sheets",
-            "responseType": "availability",
-            "optional": false,
-            "severity": "",
-            "id": "section-6-item-15"
-          },
-          {
             "text": "Suction ball (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-6-item-16"
+            "id": "section-6-item-15"
           },
           {
             "text": "Waste basket",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-17"
+            "id": "section-6-item-16"
           },
           {
             "text": "Sharp disposal boxes",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-18"
+            "id": "section-6-item-17"
           },
           {
             "text": "Pickup forceps with jar",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-19"
+            "id": "section-6-item-18"
           },
           {
             "text": "Sterilizer (steam autoclave/hot air oven)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-20"
+            "id": "section-6-item-19"
           },
           {
             "text": "Examination couch",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-21"
+            "id": "section-6-item-20"
           },
           {
             "text": "Fetoscope",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-22"
+            "id": "section-6-item-21"
           },
           {
             "text": "IV stand",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-23"
+            "id": "section-6-item-22"
           },
           {
             "text": "Storage shelves for equipment/medicines",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-24"
+            "id": "section-6-item-23"
           },
           {
             "text": "Recording & reporting materials",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-25"
+            "id": "section-6-item-24"
           },
           {
             "text": "Alcohol / Iodine / Savlon",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-26"
+            "id": "section-6-item-25"
           },
           {
             "text": "Gauze",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-27"
+            "id": "section-6-item-26"
           },
           {
             "text": "Bandage",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-28"
+            "id": "section-6-item-27"
           },
           {
             "text": "Cotton",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-29"
+            "id": "section-6-item-28"
           },
           {
             "text": "IV Cannulae",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-30"
+            "id": "section-6-item-29"
           },
           {
             "text": "Adhesive tape",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-31"
+            "id": "section-6-item-30"
           },
           {
             "text": "Surgical blades",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-32"
+            "id": "section-6-item-31"
           },
           {
             "text": "Tongue depressor",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-33"
+            "id": "section-6-item-32"
           },
           {
             "text": "Splints (locally produced/adapted)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-34"
+            "id": "section-6-item-33"
           },
           {
             "text": "Foley Catheters",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-35"
+            "id": "section-6-item-34"
           },
           {
             "text": "Tourniquets",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-36"
+            "id": "section-6-item-35"
           },
           {
             "text": "KY jelly",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-37"
+            "id": "section-6-item-36"
           },
           {
             "text": "Dressing packs",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-38"
+            "id": "section-6-item-37"
           },
           {
             "text": "Steri-strips for steam autoclave",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-39"
+            "id": "section-6-item-38"
           },
           {
             "text": "Disinfectant chemicals (Bleach)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-40"
+            "id": "section-6-item-39"
           },
           {
             "text": "Disposable syringe with needle",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-41"
+            "id": "section-6-item-40"
           },
           {
             "text": "Equipment and supplies required for sanitation activities (Incinerator, safety boxes, leak-proof containers, trolley, PPE, autoclave, pressure cooker, cleaning solutions, mops and dustbins).",
             "responseType": "standard",
             "optional": false,
             "severity": "major",
-            "id": "section-6-item-42"
+            "id": "section-6-item-41"
           }
         ]
       }
     ],
-    "itemCount": 93
+    "itemCount": 91
   },
   {
     "id": "ophthalmology",
@@ -4941,274 +4864,267 @@
             "id": "section-6-item-2"
           },
           {
-            "text": "[ ]",
+            "text": "Torch (light)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-3"
           },
           {
-            "text": "Torch (light)",
+            "text": "Standard Snellen test chart",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-4"
           },
           {
-            "text": "Standard Snellen test chart",
+            "text": "Near point Acuity test card",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-5"
           },
           {
-            "text": "Near point Acuity test card",
+            "text": "Ishihara's Color test",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-6"
           },
           {
-            "text": "Ishihara's Color test",
+            "text": "Trial set with trial frame (children and adult)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
             "id": "section-6-item-7"
           },
           {
-            "text": "Trial set with trial frame (children and adult)",
-            "responseType": "availability",
-            "optional": false,
-            "severity": "",
-            "id": "section-6-item-8"
-          },
-          {
             "text": "Cross cylinder (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-6-item-9"
+            "id": "section-6-item-8"
           },
           {
             "text": "Stereo test",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-10"
+            "id": "section-6-item-9"
           },
           {
             "text": "PD meter / ruler",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-11"
+            "id": "section-6-item-10"
           },
           {
             "text": "Aspheric fundus lenses volk: 78 / 90 dpt",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-12"
+            "id": "section-6-item-11"
           },
           {
             "text": "Gonioscopy lens",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-13"
+            "id": "section-6-item-12"
           },
           {
             "text": "Three mirror Lens",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-14"
+            "id": "section-6-item-13"
           },
           {
             "text": "Probing set / Lacrimal dilator and probe",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-15"
+            "id": "section-6-item-14"
           },
           {
             "text": "A-scan ultrasound (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-6-item-16"
+            "id": "section-6-item-15"
           },
           {
             "text": "B-scan ultrasound (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-6-item-17"
+            "id": "section-6-item-16"
           },
           {
             "text": "BP apparatus",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-18"
+            "id": "section-6-item-17"
           },
           {
             "text": "Glucometer",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-19"
+            "id": "section-6-item-18"
           },
           {
             "text": "Autoclave",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-20"
+            "id": "section-6-item-19"
           },
           {
             "text": "Keratometry (Optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-6-item-21"
+            "id": "section-6-item-20"
           },
           {
             "text": "Visual field (Optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-6-item-22"
+            "id": "section-6-item-21"
           },
           {
             "text": "Lensometer (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-6-item-23"
+            "id": "section-6-item-22"
           },
           {
             "text": "Autorefractometer (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-6-item-24"
+            "id": "section-6-item-23"
           },
           {
             "text": "Tropicamide eye drops",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-25"
+            "id": "section-6-item-24"
           },
           {
             "text": "Atropine drops",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-26"
+            "id": "section-6-item-25"
           },
           {
             "text": "Fluorescein strips / drops",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-27"
+            "id": "section-6-item-26"
           },
           {
             "text": "Fluorescein Injection (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-6-item-28"
+            "id": "section-6-item-27"
           },
           {
             "text": "Irrigation solution (Ringer, saline)",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-29"
+            "id": "section-6-item-28"
           },
           {
             "text": "Lidocaine injection",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-30"
+            "id": "section-6-item-29"
           },
           {
             "text": "Pilocarpine inj. / drops",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-31"
+            "id": "section-6-item-30"
           },
           {
             "text": "Acetazolamide / Diamox tab",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-32"
+            "id": "section-6-item-31"
           },
           {
             "text": "Cyclopentolate drops",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-33"
+            "id": "section-6-item-32"
           },
           {
             "text": "Tetracaine drops",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-34"
+            "id": "section-6-item-33"
           },
           {
             "text": "Eye pad",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-35"
+            "id": "section-6-item-34"
           },
           {
             "text": "OR table",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-36"
+            "id": "section-6-item-35"
           },
           {
             "text": "Operation microscope (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-6-item-37"
+            "id": "section-6-item-36"
           },
           {
             "text": "Cataract set (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-6-item-38"
+            "id": "section-6-item-37"
           },
           {
             "text": "Glaucoma set (optional)",
             "responseType": "availability",
             "optional": true,
             "severity": "",
-            "id": "section-6-item-39"
+            "id": "section-6-item-38"
           },
           {
             "text": "Alcohol injection 96%",
             "responseType": "availability",
             "optional": false,
             "severity": "",
-            "id": "section-6-item-40"
+            "id": "section-6-item-39"
           }
         ]
       }
     ],
-    "itemCount": 63
+    "itemCount": 62
   }
 ]
