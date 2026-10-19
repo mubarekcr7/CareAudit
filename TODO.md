@@ -29,3 +29,12 @@
 ## Evidence recorded
 
 The Vite production build passes, `/manus-routes.json` and the offline app-shell assets respond over HTTP 200, the seven route surfaces were visually inspected at desktop and mobile widths, and stale deep links resolve to a recovery view.
+
+
+## Role-based access
+
+- [x] The first entry screen provides a first-run admin setup flow and subsequent admin sign-in with a username and password.
+- [x] An authenticated admin can add many inspector accounts by assigning each inspector a name, username, and password, and can pause, activate, or reset inspector access.
+- [x] Inspectors can sign in with their assigned credentials and do not see the admin-only inspector roster or its navigation entry.
+- [x] Role sessions persist locally, passwords are stored as SHA-256 hashes, and the app remains compatible with the offline-ready workspace model.
+- [x] `/team` is included in the route manifest, diagnostics remain registered, the production build passes, and the admin/inspector flow was exercised in Preview.

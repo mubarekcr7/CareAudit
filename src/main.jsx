@@ -19,7 +19,10 @@ import {
   HeartPulse,
   Home,
   Info,
+  KeyRound,
   LayoutDashboard,
+  LogIn,
+  LogOut,
   Menu,
   MoreHorizontal,
   PencilLine,
@@ -29,6 +32,10 @@ import {
   ShieldCheck,
   Sparkles,
   Trash2,
+  UserCog,
+  UserPlus,
+  UserRound,
+  Users,
   X,
   XCircle,
 } from 'lucide-react';
@@ -36,6 +43,8 @@ import checklistTemplates from './checklistData.json';
 import './styles.css';
 
 const STORAGE_KEY = 'careaudit-inspections-v1';
+const AUTH_STORAGE_KEY = 'careaudit-auth-v1';
+const SESSION_STORAGE_KEY = 'careaudit-session-v1';
 const TEMPLATE_ACCENTS = ['aqua', 'gold', 'plum', 'blue', 'coral', 'green', 'indigo'];
 const TEMPLATE_MARKS = ['CP', 'DS', '4P', 'MP', 'PT', 'PC', 'OP'];
 const DEFAULT_META = {
@@ -62,6 +71,41 @@ function loadRecords() {
   } catch {
     return [];
   }
+}
+
+function loadAuthStore() {
+  try {
+    const saved = window.localStorage.getItem(AUTH_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : { admin: null, inspectors: [] };
+  } catch {
+    return { admin: null, inspectors: [] };
+  }
+}
+
+function loadSession() {
+  try {
+    const saved = window.localStorage.getItem(SESSION_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch {
+    return null;
+  }
+}
+
+async function hashPassword(password) {
+  const bytes = new TextEncoder().encode(password);
+  const digest = await window.crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
+function normalizeUsername(value) {
+  return value.trim().toLowerCase().replace(/\s+/g, '');
+}
+
+function authUserFromSession(session, authStore) {
+  if (!session) return null;
+  if (session.role === 'admin' && authStore.admin?.username === session.username) return { ...authStore.admin, role: 'admin' };
+  const inspector = authStore.inspectors.find((item) => item.id === session.id && item.active !== false);
+  return inspector ? { ...inspector, role: 'inspector' } : null;
 }
 
 function formatDate(value, options = { month: 'short', day: 'numeric', year: 'numeric' }) {
@@ -160,16 +204,89 @@ function ScoreChip({ score }) {
   return <span className={`score-chip ${scoreTone(score)}`}><span className="score-dot" /> {score}%</span>;
 }
 
+function AuthGate() {
+  const [authStore, setAuthStore] = useState(loadAuthStore);
+  const [session, setSession] = useState(loadSession);
+  const currentUser = authUserFromSession(session, authStore);
+
+  const persistAuthStore = (nextStore) => {
+    setAuthStore(nextStore);
+    window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(nextStore));
+  };
+
+  const completeLogin = (nextSession) => {
+    setSession(nextSession);
+    window.localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(nextSession));
+  };
+
+  const logout = () => {
+    setSession(null);
+    window.localStorage.removeItem(SESSION_STORAGE_KEY);
+  };
+
+  if (currentUser) {
+    return <App currentUser={currentUser} authStore={authStore} onAuthChange={persistAuthStore} onLogout={logout} />;
+  }
+  return <LoginPage authStore={authStore} onAuthChange={persistAuthStore} onLogin={completeLogin} />;
+}
+
+function LoginPage({ authStore, onAuthChange, onLogin }) {
+  const [mode, setMode] = useState(authStore.admin ? 'admin' : 'setup');
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  const firstRun = !authStore.admin;
+
+  const submit = async (event) => {
+    event.preventDefault();
+    setError('');
+    const normalized = normalizeUsername(username);
+    if (!normalized || password.length < 6 || (mode === 'setup' && !name.trim())) {
+      setError(mode === 'setup' ? 'Add a name, username, and a password with at least 6 characters.' : 'Enter your username and password.');
+      return;
+    }
+    setBusy(true);
+    try {
+      const passwordHash = await hashPassword(password);
+      if (mode === 'setup') {
+        if (authStore.admin) {
+          setError('An admin account already exists. Sign in instead.');
+        } else {
+          const admin = { id: 'admin', name: name.trim(), username: normalized, passwordHash, createdAt: new Date().toISOString() };
+          onAuthChange({ ...authStore, admin });
+          onLogin({ role: 'admin', username: normalized, id: 'admin' });
+        }
+      } else if (mode === 'admin') {
+        if (!authStore.admin || authStore.admin.username !== normalized || authStore.admin.passwordHash !== passwordHash) setError('Admin username or password is not correct.');
+        else onLogin({ role: 'admin', username: normalized, id: 'admin' });
+      } else {
+        const inspector = authStore.inspectors.find((item) => item.username === normalized && item.active !== false);
+        if (!inspector || inspector.passwordHash !== passwordHash) setError('Inspector username or password is not correct.');
+        else onLogin({ role: 'inspector', username: normalized, id: inspector.id });
+      }
+    } catch {
+      setError('Sign-in could not be completed in this browser. Try again.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return <div className="auth-shell"><div className="auth-art"><div className="auth-orbit orbit-a" /><div className="auth-orbit orbit-b" /><div className="auth-sun" /><div className="auth-stamp"><ShieldCheck size={17} /> PRIVATE<br />FIELD WORKSPACE</div><div className="auth-art-copy"><div className="eyebrow">CAREAUDIT · FACILITY COMPLIANCE</div><h1>Every room.<br /><em>Accountable.</em></h1><p>A calm command center for inspection teams, from first walkthrough to final sign-off.</p></div></div><main className="auth-panel"><div className="auth-brand"><div className="brand-symbol"><HeartPulse size={19} /></div><div><div className="brand-name">Care<span>Audit</span></div><div className="brand-caption">facility compliance</div></div></div><div className="auth-panel-copy"><div className="eyebrow">{firstRun ? 'FIRST-RUN ADMIN SETUP' : 'SECURE WORKSPACE ACCESS'}</div><h2>{mode === 'setup' ? 'Create the admin account.' : 'Sign in to continue.'}</h2><p>{mode === 'setup' ? 'The admin creates inspector accounts and controls who can enter the workspace.' : 'Choose your role, then use the credentials assigned to you.'}</p></div>{!firstRun && <div className="role-switch"><button className={mode === 'admin' ? 'active' : ''} onClick={() => { setMode('admin'); setError(''); }}><UserCog size={15} /> Admin</button><button className={mode === 'inspector' ? 'active' : ''} onClick={() => { setMode('inspector'); setError(''); }}><UserRound size={15} /> Inspector</button></div>}<form className="auth-form" onSubmit={submit}>{mode === 'setup' && <label className="field"><span>Admin name <b>*</b></span><input value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Hana Bekele" autoComplete="name" /></label>}<label className="field"><span>{mode === 'setup' ? 'Admin username' : `${mode === 'admin' ? 'Admin' : 'Inspector'} username`} <b>*</b></span><input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="username" autoComplete="username" /></label><label className="field"><span>Password <b>*</b></span><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" autoComplete={mode === 'setup' ? 'new-password' : 'current-password'} /></label>{error && <div className="auth-error"><XCircle size={15} /> {error}</div>}<button className="button primary auth-submit" type="submit" disabled={busy}>{busy ? 'Checking…' : mode === 'setup' ? <><UserPlus size={16} /> Create admin account</> : <><LogIn size={16} /> Sign in as {mode}</>}</button></form><div className="auth-footnote"><KeyRound size={14} /> Credentials are stored locally for this offline-ready workspace.</div></main></div>;
+}
+
 function getInitialRoute() {
   const pathname = window.location.pathname;
   if (pathname === '/library') return { view: 'library', recordId: null };
   if (pathname === '/new') return { view: 'new', recordId: null };
+  if (pathname === '/team') return { view: 'team', recordId: null };
   const match = pathname.match(/^\/(audit|summary|report)\/([^/]+)/);
   if (match) return { view: match[1], recordId: decodeURIComponent(match[2]) };
   return { view: 'dashboard', recordId: null };
 }
 
-function App() {
+function App({ currentUser, authStore, onAuthChange, onLogout }) {
   const [records, setRecords] = useState(loadRecords);
   const initialRoute = useMemo(getInitialRoute, []);
   const [view, setView] = useState(initialRoute.view);
@@ -202,6 +319,13 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  useEffect(() => {
+    if (view === 'team' && currentUser.role !== 'admin') {
+      setView('dashboard');
+      window.history.replaceState({}, '', '/');
+    }
+  }, [view, currentUser.role]);
+
   const activeRecord = records.find((record) => record.id === activeRecordId) || null;
   const activeTemplate = checklistTemplates.find((template) => template.id === activeRecord?.templateId) || null;
 
@@ -209,7 +333,7 @@ function App() {
     setView(nextView);
     if (recordId !== undefined) setActiveRecordId(recordId);
     setMobileMenu(false);
-    const route = nextView === 'dashboard' ? '/' : nextView === 'library' ? '/library' : nextView === 'new' ? '/new' : `/${nextView}/${recordId || ''}`;
+    const route = nextView === 'dashboard' ? '/' : nextView === 'library' ? '/library' : nextView === 'new' ? '/new' : nextView === 'team' ? '/team' : `/${nextView}/${recordId || ''}`;
     window.history.replaceState({}, '', route);
   };
 
@@ -251,6 +375,7 @@ function App() {
   const nav = [
     { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
     { id: 'library', label: 'Checklist library', icon: BookOpen },
+    ...(currentUser.role === 'admin' ? [{ id: 'team', label: 'Inspector accounts', icon: Users }] : []),
   ];
   const recordView = ['audit', 'summary', 'report'].includes(view);
 
@@ -288,16 +413,18 @@ function App() {
           <button className="mobile-menu-button" onClick={() => setMobileMenu((open) => !open)} aria-label="Toggle navigation"><Menu size={20} /></button>
           <div className="breadcrumbs">
             <span>CareAudit</span><ChevronRight size={14} />
-            <strong>{view === 'dashboard' ? 'Overview' : view === 'library' ? 'Checklist library' : view === 'new' ? 'New inspection' : activeTemplate?.title || 'Inspection'}</strong>
+            <strong>{view === 'dashboard' ? 'Overview' : view === 'library' ? 'Checklist library' : view === 'new' ? 'New inspection' : view === 'team' ? 'Inspector accounts' : activeTemplate?.title || 'Inspection'}</strong>
           </div>
           <div className="topbar-actions">
             <span className="save-indicator"><span /> Saved locally</span>
-            <button className="avatar-button" title="Local workspace">CA</button>
+            <span className="role-chip"><span className="role-chip-dot" /> {currentUser.role === 'admin' ? 'Admin' : 'Inspector'}</span>
+            <button className="avatar-button" title="Sign out" onClick={onLogout}>{(currentUser.name || currentUser.username || 'CA').slice(0, 2).toUpperCase()}</button>
           </div>
         </header>
 
         {view === 'dashboard' && <Dashboard records={records} onStart={startInspection} onOpen={openAudit} onRemove={removeRecord} onLibrary={() => navigate('library')} />}
         {view === 'library' && <Library search={librarySearch} setSearch={setLibrarySearch} selectedTemplateId={selectedTemplateId} setSelectedTemplateId={setSelectedTemplateId} onStart={startInspection} />}
+        {view === 'team' && currentUser.role === 'admin' && <Team authStore={authStore} onAuthChange={onAuthChange} />}
         {view === 'new' && activeRecord && activeTemplate && <NewInspection record={activeRecord} template={activeTemplate} selectedTemplateId={selectedTemplateId} setSelectedTemplateId={setSelectedTemplateId} onUpdate={updateRecord} onStart={openAudit} onCancel={() => navigate('dashboard')} />}
         {view === 'audit' && activeRecord && activeTemplate && <AuditWorkspace record={activeRecord} template={activeTemplate} onUpdate={updateRecord} onSummary={() => navigate('summary', activeRecord.id)} onExit={() => navigate('dashboard')} />}
         {view === 'summary' && activeRecord && activeTemplate && <Summary record={activeRecord} template={activeTemplate} onUpdate={updateRecord} onAudit={() => navigate('audit', activeRecord.id)} onReport={() => navigate('report', activeRecord.id)} />}
@@ -314,6 +441,53 @@ function PageHeader({ eyebrow, title, description, action }) {
     <div><div className="eyebrow">{eyebrow}</div><h1>{title}</h1>{description && <p>{description}</p>}</div>
     {action && <div className="page-header-action">{action}</div>}
   </div>;
+}
+
+function Team({ authStore, onAuthChange }) {
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  const addInspector = async (event) => {
+    event.preventDefault();
+    setError('');
+    setNotice('');
+    const normalized = normalizeUsername(username);
+    if (!name.trim() || !normalized || password.length < 6) {
+      setError('Add a name, username, and a password with at least 6 characters.');
+      return;
+    }
+    if (normalized === authStore.admin?.username || authStore.inspectors.some((item) => item.username === normalized)) {
+      setError('That username is already in use.');
+      return;
+    }
+    setBusy(true);
+    const passwordHash = await hashPassword(password);
+    const inspector = { id: `inspector-${Date.now()}`, name: name.trim(), username: normalized, passwordHash, active: true, createdAt: new Date().toISOString() };
+    onAuthChange({ ...authStore, inspectors: [inspector, ...authStore.inspectors] });
+    setName('');
+    setUsername('');
+    setPassword('');
+    setNotice(`${inspector.name} can now sign in with ${inspector.username}.`);
+    setBusy(false);
+  };
+
+  const toggleInspector = (id) => {
+    onAuthChange({ ...authStore, inspectors: authStore.inspectors.map((item) => item.id === id ? { ...item, active: item.active === false } : item) });
+  };
+
+  const resetPassword = async (inspector) => {
+    const nextPassword = window.prompt(`Set a new password for ${inspector.name} (at least 6 characters):`);
+    if (!nextPassword || nextPassword.length < 6) return;
+    const passwordHash = await hashPassword(nextPassword);
+    onAuthChange({ ...authStore, inspectors: authStore.inspectors.map((item) => item.id === inspector.id ? { ...item, passwordHash, active: true } : item) });
+    setNotice(`Password reset for ${inspector.name}.`);
+  };
+
+  return <div className="page team-page"><PageHeader eyebrow="ADMIN CONTROL ROOM" title="The inspector roster." description="Create and manage the credentials your inspection team uses to enter this local workspace." action={<div className="team-admin-badge"><UserCog size={15} /> Signed in as admin</div>} /><div className="team-layout"><section className="panel team-form-panel"><div className="eyebrow">ADD AN INSPECTOR</div><h2>Assign a new login.</h2><p className="team-muted">The inspector will use these credentials on this browser or on any browser where this workspace is copied.</p><form className="team-form" onSubmit={addInspector}><label className="field"><span>Inspector name <b>*</b></span><input value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Aster Tesfaye" /></label><label className="field"><span>Username <b>*</b></span><input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="aster.tesfaye" /></label><label className="field"><span>Temporary password <b>*</b></span><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" /></label>{error && <div className="auth-error"><XCircle size={15} /> {error}</div>}{notice && <div className="team-notice"><CheckCircle2 size={15} /> {notice}</div>}<button className="button primary full" disabled={busy} type="submit"><UserPlus size={16} /> {busy ? 'Creating…' : 'Create inspector account'}</button></form></section><section className="panel roster-panel"><div className="panel-heading"><div><div className="eyebrow">TEAM DIRECTORY</div><h2>People with access</h2></div><span className="roster-count">{authStore.inspectors.length} {authStore.inspectors.length === 1 ? 'inspector' : 'inspectors'}</span></div>{authStore.inspectors.length === 0 ? <div className="roster-empty"><Users size={22} /><strong>No inspector accounts yet.</strong><span>Add the first person who will conduct visits.</span></div> : <div className="roster-list">{authStore.inspectors.map((inspector) => <div className="roster-row" key={inspector.id}><div className="roster-avatar"><UserRound size={16} /></div><div className="roster-main"><strong>{inspector.name}</strong><span>@{inspector.username} · added {formatShortDate(inspector.createdAt)}</span></div><span className={`account-status ${inspector.active === false ? 'inactive' : 'active'}`}><span /> {inspector.active === false ? 'Paused' : 'Active'}</span><button className="roster-action" onClick={() => resetPassword(inspector)} title="Reset password"><KeyRound size={15} /></button><button className="roster-action" onClick={() => toggleInspector(inspector.id)} title={inspector.active === false ? 'Activate account' : 'Pause account'}>{inspector.active === false ? <LogIn size={15} /> : <LogOut size={15} />}</button></div>)}</div>}</section></div><div className="team-security-note"><ShieldCheck size={17} /><span><strong>Role boundaries</strong> Admins manage inspector accounts. Inspectors can work inspections but do not see this roster.</span></div></div>;
 }
 
 function Dashboard({ records, onStart, onOpen, onRemove, onLibrary }) {
@@ -494,10 +668,10 @@ function Report({ record, template, onAudit, onSummary }) {
 
 function ReportMeta({ label, value }) { return <div className="report-meta"><span>{label}</span><strong>{value || '—'}</strong></div>; }
 
-createRoot(document.getElementById('root')).render(<App />);
+createRoot(document.getElementById('root')).render(<AuthGate />);
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
+    navigator.serviceWorker.register('/sw.js?v=2').catch(() => {});
   });
 }
