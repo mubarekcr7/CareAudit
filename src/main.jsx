@@ -43,8 +43,6 @@ import checklistTemplates from './checklistData.json';
 import './styles.css';
 
 const STORAGE_KEY = 'careaudit-inspections-v1';
-const AUTH_STORAGE_KEY = 'careaudit-auth-v1';
-const SESSION_STORAGE_KEY = 'careaudit-session-v1';
 const TEMPLATE_ACCENTS = ['aqua', 'gold', 'plum', 'blue', 'coral', 'green', 'indigo'];
 const TEMPLATE_MARKS = ['CP', 'DS', '4P', 'MP', 'PT', 'PC', 'OP'];
 const DEFAULT_META = {
@@ -73,39 +71,8 @@ function loadRecords() {
   }
 }
 
-function loadAuthStore() {
-  try {
-    const saved = window.localStorage.getItem(AUTH_STORAGE_KEY);
-    return saved ? JSON.parse(saved) : { admin: null, inspectors: [] };
-  } catch {
-    return { admin: null, inspectors: [] };
-  }
-}
-
-function loadSession() {
-  try {
-    const saved = window.localStorage.getItem(SESSION_STORAGE_KEY);
-    return saved ? JSON.parse(saved) : null;
-  } catch {
-    return null;
-  }
-}
-
-async function hashPassword(password) {
-  const bytes = new TextEncoder().encode(password);
-  const digest = await window.crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, '0')).join('');
-}
-
 function normalizeUsername(value) {
   return value.trim().toLowerCase().replace(/\s+/g, '');
-}
-
-function authUserFromSession(session, authStore) {
-  if (!session) return null;
-  if (session.role === 'admin' && authStore.admin?.username === session.username) return { ...authStore.admin, role: 'admin' };
-  const inspector = authStore.inspectors.find((item) => item.id === session.id && item.active !== false);
-  return inspector ? { ...inspector, role: 'inspector' } : null;
 }
 
 function formatDate(value, options = { month: 'short', day: 'numeric', year: 'numeric' }) {
@@ -204,81 +171,101 @@ function ScoreChip({ score }) {
   return <span className={`score-chip ${scoreTone(score)}`}><span className="score-dot" /> {score}%</span>;
 }
 
-function AuthGate() {
-  const [authStore, setAuthStore] = useState(loadAuthStore);
-  const [session, setSession] = useState(loadSession);
-  const currentUser = authUserFromSession(session, authStore);
-
-  const persistAuthStore = (nextStore) => {
-    setAuthStore(nextStore);
-    window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(nextStore));
-  };
-
-  const completeLogin = (nextSession) => {
-    setSession(nextSession);
-    window.localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(nextSession));
-  };
-
-  const updateAdmin = (adminPatch) => {
-    const nextAdmin = { ...authStore.admin, ...adminPatch };
-    persistAuthStore({ ...authStore, admin: nextAdmin });
-    if (session?.role === 'admin') completeLogin({ ...session, username: nextAdmin.username });
-  };
-
-  const logout = () => {
-    setSession(null);
-    window.localStorage.removeItem(SESSION_STORAGE_KEY);
-  };
-
-  if (currentUser) {
-    return <App currentUser={currentUser} authStore={authStore} onAuthChange={persistAuthStore} onAdminChange={updateAdmin} onLogout={logout} />;
-  }
-  return <LoginPage authStore={authStore} onAuthChange={persistAuthStore} onLogin={completeLogin} />;
+async function apiRequest(path, options = {}) {
+  const response = await fetch(`/api${path}`, { credentials: 'include', ...options, headers: { 'Content-Type': 'application/json', ...(options.headers || {}) } });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || 'The account service could not complete that request.');
+  return payload;
 }
 
-function LoginPage({ authStore, onAuthChange, onLogin }) {
-  const firstRun = !authStore.admin;
-  const [mode, setMode] = useState(authStore.admin ? 'admin' : 'setup');
-  const [name, setName] = useState(firstRun ? 'CareAudit Administrator' : '');
-  const [username, setUsername] = useState(firstRun ? 'admin' : '');
-  const [password, setPassword] = useState(firstRun ? '12345678' : '');
-  const [error, setError] = useState('');
+function AuthGate() {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [authStore, setAuthStore] = useState({ admin: null, inspectors: [] });
+  const [loading, setLoading] = useState(true);
+  const [serviceError, setServiceError] = useState('');
+
+  const refreshAdminData = async () => {
+    const overview = await apiRequest('/admin/overview');
+    setAuthStore({ admin: overview.admin, inspectors: overview.inspectors });
+    setCurrentUser(overview.admin);
+    return overview;
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { user } = await apiRequest('/auth/me');
+        setCurrentUser(user);
+        if (user.role === 'admin') await refreshAdminData();
+      } catch {
+        // A 401 is the normal signed-out state; the login form remains available.
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const login = async ({ role, username, password }) => {
+    setServiceError('');
+    const { user } = await apiRequest('/auth/login', { method: 'POST', body: JSON.stringify({ role, username, password }) });
+    setCurrentUser(user);
+    if (user.role === 'admin') await refreshAdminData();
+  };
+
+  const logout = async () => {
+    await apiRequest('/auth/logout', { method: 'POST' }).catch(() => {});
+    setCurrentUser(null);
+    setAuthStore({ admin: null, inspectors: [] });
+  };
+
+  const addInspector = async (payload) => {
+    await apiRequest('/admin/inspectors', { method: 'POST', body: JSON.stringify(payload) });
+    await refreshAdminData();
+  };
+
+  const toggleInspector = async (id, active) => {
+    await apiRequest(`/admin/inspectors/${id}`, { method: 'PATCH', body: JSON.stringify({ active }) });
+    await refreshAdminData();
+  };
+
+  const resetInspector = async (id, password) => {
+    await apiRequest(`/admin/inspectors/${id}/reset-password`, { method: 'POST', body: JSON.stringify({ password }) });
+    await refreshAdminData();
+  };
+
+  const updateAdmin = async (payload) => {
+    const { admin } = await apiRequest('/admin/profile', { method: 'PUT', body: JSON.stringify(payload) });
+    setCurrentUser(admin);
+    await refreshAdminData();
+  };
+
+  if (loading) return <div className="auth-loading"><HeartPulse size={21} /><span>Connecting to the secure workspace…</span></div>;
+  if (currentUser) return <App currentUser={currentUser} authStore={authStore} onAddInspector={addInspector} onToggleInspector={toggleInspector} onResetInspector={resetInspector} onAdminChange={updateAdmin} onLogout={logout} />;
+  return <LoginPage onLogin={login} serviceError={serviceError} />;
+}
+
+function LoginPage({ onLogin, serviceError }) {
+  const [mode, setMode] = useState('admin');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(serviceError);
   const [busy, setBusy] = useState(false);
+
   const submit = async (event) => {
     event.preventDefault();
     setError('');
-    const normalized = normalizeUsername(username);
-    if (!normalized || password.length < 6 || (mode === 'setup' && !name.trim())) {
-      setError(mode === 'setup' ? 'Add a name, username, and a password with at least 6 characters.' : 'Enter your username and password.');
-      return;
-    }
+    if (!username.trim() || password.length < 6) { setError('Enter your username and password.'); return; }
     setBusy(true);
     try {
-      const passwordHash = await hashPassword(password);
-      if (mode === 'setup') {
-        if (authStore.admin) {
-          setError('An admin account already exists. Sign in instead.');
-        } else {
-          const admin = { id: 'admin', name: name.trim(), username: normalized, passwordHash, createdAt: new Date().toISOString() };
-          onAuthChange({ ...authStore, admin });
-          onLogin({ role: 'admin', username: normalized, id: 'admin' });
-        }
-      } else if (mode === 'admin') {
-        if (!authStore.admin || authStore.admin.username !== normalized || authStore.admin.passwordHash !== passwordHash) setError('Admin username or password is not correct.');
-        else onLogin({ role: 'admin', username: normalized, id: 'admin' });
-      } else {
-        const inspector = authStore.inspectors.find((item) => item.username === normalized && item.active !== false);
-        if (!inspector || inspector.passwordHash !== passwordHash) setError('Inspector username or password is not correct.');
-        else onLogin({ role: 'inspector', username: normalized, id: inspector.id });
-      }
-    } catch {
-      setError('Sign-in could not be completed in this browser. Try again.');
+      await onLogin({ role: mode, username: normalizeUsername(username), password });
+    } catch (requestError) {
+      setError(requestError.message);
     } finally {
       setBusy(false);
     }
   };
 
-  return <div className="auth-shell"><div className="auth-art"><div className="auth-orbit orbit-a" /><div className="auth-orbit orbit-b" /><div className="auth-sun" /><div className="auth-stamp"><ShieldCheck size={17} /> PRIVATE<br />FIELD WORKSPACE</div><div className="auth-art-copy"><div className="eyebrow">CAREAUDIT · FACILITY COMPLIANCE</div><h1>Every room.<br /><em>Accountable.</em></h1><p>A calm command center for inspection teams, from first walkthrough to final sign-off.</p></div></div><main className="auth-panel"><div className="auth-brand"><div className="brand-symbol"><HeartPulse size={19} /></div><div><div className="brand-name">Care<span>Audit</span></div><div className="brand-caption">facility compliance</div></div></div><div className="auth-panel-copy"><div className="eyebrow">{firstRun ? 'FIRST-RUN ADMIN SETUP' : 'SECURE WORKSPACE ACCESS'}</div><h2>{mode === 'setup' ? 'Create the admin account.' : 'Sign in to continue.'}</h2><p>{mode === 'setup' ? 'Use the default admin credentials below, then change them from Admin settings after signing in.' : 'Choose your role, then use the credentials assigned to you.'}</p></div>{!firstRun && <div className="role-switch"><button className={mode === 'admin' ? 'active' : ''} onClick={() => { setMode('admin'); setError(''); setUsername(''); setPassword(''); }}><UserCog size={15} /> Admin</button><button className={mode === 'inspector' ? 'active' : ''} onClick={() => { setMode('inspector'); setError(''); setUsername(''); setPassword(''); }}><UserRound size={15} /> Inspector</button></div>}{mode === 'setup' && <div className="default-credentials"><KeyRound size={14} /><span>Default login: <strong>admin</strong> / <strong>12345678</strong></span></div>}<form className="auth-form" onSubmit={submit}>{mode === 'setup' && <label className="field"><span>Admin name <b>*</b></span><input value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Hana Bekele" autoComplete="name" /></label>}<label className="field"><span>{mode === 'setup' ? 'Admin username' : `${mode === 'admin' ? 'Admin' : 'Inspector'} username`} <b>*</b></span><input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="username" autoComplete="username" /></label><label className="field"><span>Password <b>*</b></span><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" autoComplete={mode === 'setup' ? 'new-password' : 'current-password'} /></label>{error && <div className="auth-error"><XCircle size={15} /> {error}</div>}<button className="button primary auth-submit" type="submit" disabled={busy}>{busy ? 'Checking…' : mode === 'setup' ? <><UserPlus size={16} /> Create admin account</> : <><LogIn size={16} /> Sign in as {mode}</>}</button></form><div className="auth-footnote"><KeyRound size={14} /> Credentials are stored locally for this offline-ready workspace.</div></main></div>;
+  return <div className="auth-shell"><div className="auth-art"><div className="auth-orbit orbit-a" /><div className="auth-orbit orbit-b" /><div className="auth-sun" /><div className="auth-stamp"><ShieldCheck size={17} /> PRIVATE<br />FIELD WORKSPACE</div><div className="auth-art-copy"><div className="eyebrow">CAREAUDIT · FACILITY COMPLIANCE</div><h1>Every room.<br /><em>Accountable.</em></h1><p>A calm command center for inspection teams, from first walkthrough to final sign-off.</p></div></div><main className="auth-panel"><div className="auth-brand"><div className="brand-symbol"><HeartPulse size={19} /></div><div><div className="brand-name">Care<span>Audit</span></div><div className="brand-caption">facility compliance</div></div></div><div className="auth-panel-copy"><div className="eyebrow">SECURE WORKSPACE ACCESS</div><h2>Sign in to continue.</h2><p>Choose your role, then use the credentials assigned to you.</p></div><div className="role-switch"><button type="button" className={mode === 'admin' ? 'active' : ''} onClick={() => { setMode('admin'); setError(''); setUsername(''); setPassword(''); }}><UserCog size={15} /> Admin</button><button type="button" className={mode === 'inspector' ? 'active' : ''} onClick={() => { setMode('inspector'); setError(''); setUsername(''); setPassword(''); }}><UserRound size={15} /> Inspector</button></div>{mode === 'admin' && <div className="default-credentials"><KeyRound size={14} /><span>New installs start with <strong>admin</strong> / <strong>12345678</strong>. Change it in Admin Settings.</span></div>}<form className="auth-form" onSubmit={submit}><label className="field"><span>{mode === 'admin' ? 'Admin' : 'Inspector'} username <b>*</b></span><input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="username" autoComplete="username" /></label><label className="field"><span>Password <b>*</b></span><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" autoComplete="current-password" /></label>{error && <div className="auth-error"><XCircle size={15} /> {error}</div>}<button className="button primary auth-submit" type="submit" disabled={busy}>{busy ? 'Checking…' : <><LogIn size={16} /> Sign in as {mode}</>}</button></form><div className="auth-footnote"><KeyRound size={14} /> Accounts are stored in the shared CareAudit database.</div></main></div>;
 }
 
 function getInitialRoute() {
@@ -291,7 +278,7 @@ function getInitialRoute() {
   return { view: 'dashboard', recordId: null };
 }
 
-function App({ currentUser, authStore, onAuthChange, onAdminChange, onLogout }) {
+function App({ currentUser, authStore, onAddInspector, onToggleInspector, onResetInspector, onAdminChange, onLogout }) {
   const [records, setRecords] = useState(loadRecords);
   const initialRoute = useMemo(getInitialRoute, []);
   const [view, setView] = useState(initialRoute.view);
@@ -429,7 +416,7 @@ function App({ currentUser, authStore, onAuthChange, onAdminChange, onLogout }) 
 
         {view === 'dashboard' && <Dashboard records={records} onStart={startInspection} onOpen={openAudit} onRemove={removeRecord} onLibrary={() => navigate('library')} />}
         {view === 'library' && <Library search={librarySearch} setSearch={setLibrarySearch} selectedTemplateId={selectedTemplateId} setSelectedTemplateId={setSelectedTemplateId} onStart={startInspection} />}
-        {view === 'team' && currentUser.role === 'admin' && <Team authStore={authStore} onAuthChange={onAuthChange} onAdminChange={onAdminChange} />}
+        {view === 'team' && currentUser.role === 'admin' && <Team authStore={authStore} onAddInspector={onAddInspector} onToggleInspector={onToggleInspector} onResetInspector={onResetInspector} onAdminChange={onAdminChange} />}
         {view === 'new' && activeRecord && activeTemplate && <NewInspection record={activeRecord} template={activeTemplate} selectedTemplateId={selectedTemplateId} setSelectedTemplateId={setSelectedTemplateId} onUpdate={updateRecord} onStart={openAudit} onCancel={() => navigate('dashboard')} />}
         {view === 'audit' && activeRecord && activeTemplate && <AuditWorkspace record={activeRecord} template={activeTemplate} onUpdate={updateRecord} onSummary={() => navigate('summary', activeRecord.id)} onExit={() => navigate('dashboard')} />}
         {view === 'summary' && activeRecord && activeTemplate && <Summary record={activeRecord} template={activeTemplate} onUpdate={updateRecord} onAudit={() => navigate('audit', activeRecord.id)} onReport={() => navigate('report', activeRecord.id)} />}
@@ -448,7 +435,7 @@ function PageHeader({ eyebrow, title, description, action }) {
   </div>;
 }
 
-function Team({ authStore, onAuthChange, onAdminChange }) {
+function Team({ authStore, onAddInspector, onToggleInspector, onResetInspector, onAdminChange }) {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -461,6 +448,11 @@ function Team({ authStore, onAuthChange, onAdminChange }) {
   const [newPassword, setNewPassword] = useState('');
   const [securityError, setSecurityError] = useState('');
 
+  useEffect(() => {
+    setAdminName(authStore.admin?.name || '');
+    setAdminUsername(authStore.admin?.username || '');
+  }, [authStore.admin?.name, authStore.admin?.username]);
+
   const addInspector = async (event) => {
     event.preventDefault();
     setError('');
@@ -470,31 +462,37 @@ function Team({ authStore, onAuthChange, onAdminChange }) {
       setError('Add a name, username, and a password with at least 6 characters.');
       return;
     }
-    if (normalized === authStore.admin?.username || authStore.inspectors.some((item) => item.username === normalized)) {
-      setError('That username is already in use.');
-      return;
-    }
     setBusy(true);
-    const passwordHash = await hashPassword(password);
-    const inspector = { id: `inspector-${Date.now()}`, name: name.trim(), username: normalized, passwordHash, active: true, createdAt: new Date().toISOString() };
-    onAuthChange({ ...authStore, inspectors: [inspector, ...authStore.inspectors] });
-    setName('');
-    setUsername('');
-    setPassword('');
-    setNotice(`${inspector.name} can now sign in with ${inspector.username}.`);
-    setBusy(false);
+    try {
+      await onAddInspector({ name: name.trim(), username: normalized, password });
+      setName('');
+      setUsername('');
+      setPassword('');
+      setNotice(`${name.trim()} can now sign in with ${normalized}.`);
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setBusy(false);
+    }
   };
 
-  const toggleInspector = (id) => {
-    onAuthChange({ ...authStore, inspectors: authStore.inspectors.map((item) => item.id === id ? { ...item, active: item.active === false } : item) });
+  const toggleInspector = async (inspector) => {
+    try {
+      await onToggleInspector(inspector.id, inspector.active === false);
+    } catch (requestError) {
+      setError(requestError.message);
+    }
   };
 
   const resetPassword = async (inspector) => {
     const nextPassword = window.prompt(`Set a new password for ${inspector.name} (at least 6 characters):`);
     if (!nextPassword || nextPassword.length < 6) return;
-    const passwordHash = await hashPassword(nextPassword);
-    onAuthChange({ ...authStore, inspectors: authStore.inspectors.map((item) => item.id === inspector.id ? { ...item, passwordHash, active: true } : item) });
-    setNotice(`Password reset for ${inspector.name}.`);
+    try {
+      await onResetInspector(inspector.id, nextPassword);
+      setNotice(`Password reset for ${inspector.name}.`);
+    } catch (requestError) {
+      setError(requestError.message);
+    }
   };
 
   const saveAdminCredentials = async (event) => {
@@ -505,23 +503,17 @@ function Team({ authStore, onAuthChange, onAdminChange }) {
       setSecurityError('Enter your current password and use at least 6 characters for a new password.');
       return;
     }
-    if (normalized !== authStore.admin?.username && authStore.inspectors.some((item) => item.username === normalized)) {
-      setSecurityError('That username is already assigned to an inspector.');
-      return;
+    try {
+      await onAdminChange({ name: adminName.trim(), username: normalized, currentPassword, newPassword });
+      setCurrentPassword('');
+      setNewPassword('');
+      setNotice('Admin credentials updated. Use the new username and password next time you sign in.');
+    } catch (requestError) {
+      setSecurityError(requestError.message);
     }
-    const currentHash = await hashPassword(currentPassword);
-    if (currentHash !== authStore.admin?.passwordHash) {
-      setSecurityError('The current admin password is not correct.');
-      return;
-    }
-    const passwordHash = newPassword ? await hashPassword(newPassword) : authStore.admin.passwordHash;
-    onAdminChange({ name: adminName.trim(), username: normalized, passwordHash });
-    setCurrentPassword('');
-    setNewPassword('');
-    setNotice('Admin credentials updated. Use the new username and password next time you sign in.');
   };
 
-  return <div className="page team-page"><PageHeader eyebrow="ADMIN CONTROL ROOM" title="The inspector roster." description="Create and manage the credentials your inspection team uses to enter this local workspace." action={<div className="team-admin-badge"><UserCog size={15} /> Signed in as admin</div>} /><div className="team-layout"><section className="panel team-form-panel"><div className="eyebrow">ADD AN INSPECTOR</div><h2>Assign a new login.</h2><p className="team-muted">The inspector will use these credentials on this browser or on any browser where this workspace is copied.</p><form className="team-form" onSubmit={addInspector}><label className="field"><span>Inspector name <b>*</b></span><input value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Aster Tesfaye" /></label><label className="field"><span>Username <b>*</b></span><input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="aster.tesfaye" /></label><label className="field"><span>Temporary password <b>*</b></span><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" /></label>{error && <div className="auth-error"><XCircle size={15} /> {error}</div>}{notice && <div className="team-notice"><CheckCircle2 size={15} /> {notice}</div>}<button className="button primary full" disabled={busy} type="submit"><UserPlus size={16} /> {busy ? 'Creating…' : 'Create inspector account'}</button></form></section><section className="panel roster-panel"><div className="panel-heading"><div><div className="eyebrow">TEAM DIRECTORY</div><h2>People with access</h2></div><span className="roster-count">{authStore.inspectors.length} {authStore.inspectors.length === 1 ? 'inspector' : 'inspectors'}</span></div>{authStore.inspectors.length === 0 ? <div className="roster-empty"><Users size={22} /><strong>No inspector accounts yet.</strong><span>Add the first person who will conduct visits.</span></div> : <div className="roster-list">{authStore.inspectors.map((inspector) => <div className="roster-row" key={inspector.id}><div className="roster-avatar"><UserRound size={16} /></div><div className="roster-main"><strong>{inspector.name}</strong><span>@{inspector.username} · added {formatShortDate(inspector.createdAt)}</span></div><span className={`account-status ${inspector.active === false ? 'inactive' : 'active'}`}><span /> {inspector.active === false ? 'Paused' : 'Active'}</span><button className="roster-action" onClick={() => resetPassword(inspector)} title="Reset password"><KeyRound size={15} /></button><button className="roster-action" onClick={() => toggleInspector(inspector.id)} title={inspector.active === false ? 'Activate account' : 'Pause account'}>{inspector.active === false ? <LogIn size={15} /> : <LogOut size={15} />}</button></div>)}</div>}</section></div><section className="panel admin-credentials-panel"><div><div className="eyebrow">ADMIN SETTINGS</div><h2>Change admin credentials.</h2><p className="team-muted">Update the admin name, username, or password. Your current password is required for every change.</p></div><form className="admin-credentials-form" onSubmit={saveAdminCredentials}><label className="field"><span>Admin name <b>*</b></span><input value={adminName} onChange={(event) => setAdminName(event.target.value)} /></label><label className="field"><span>Admin username <b>*</b></span><input value={adminUsername} onChange={(event) => setAdminUsername(event.target.value)} /></label><label className="field"><span>Current password <b>*</b></span><input type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} placeholder="Required to save changes" /></label><label className="field"><span>New password</span><input type="password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} placeholder="Leave blank to keep current password" /></label>{securityError && <div className="auth-error"><XCircle size={15} /> {securityError}</div>}<button className="button secondary" type="submit"><KeyRound size={16} /> Save admin credentials</button></form></section><div className="team-security-note"><ShieldCheck size={17} /><span><strong>Role boundaries</strong> Admins manage inspector accounts. Inspectors can work inspections but do not see this roster.</span></div></div>;
+  return <div className="page team-page"><PageHeader eyebrow="ADMIN CONTROL ROOM" title="The inspector roster." description="Create and manage the credentials your inspection team uses to enter this shared workspace." action={<div className="team-admin-badge"><UserCog size={15} /> Signed in as admin</div>} /><div className="team-layout"><section className="panel team-form-panel"><div className="eyebrow">ADD AN INSPECTOR</div><h2>Assign a new login.</h2><p className="team-muted">Inspector accounts are stored in the shared CareAudit database and can sign in from any approved session.</p><form className="team-form" onSubmit={addInspector}><label className="field"><span>Inspector name <b>*</b></span><input value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Aster Tesfaye" /></label><label className="field"><span>Username <b>*</b></span><input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="aster.tesfaye" /></label><label className="field"><span>Temporary password <b>*</b></span><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" /></label>{error && <div className="auth-error"><XCircle size={15} /> {error}</div>}{notice && <div className="team-notice"><CheckCircle2 size={15} /> {notice}</div>}<button className="button primary full" disabled={busy} type="submit"><UserPlus size={16} /> {busy ? 'Creating…' : 'Create inspector account'}</button></form></section><section className="panel roster-panel"><div className="panel-heading"><div><div className="eyebrow">TEAM DIRECTORY</div><h2>People with access</h2></div><span className="roster-count">{authStore.inspectors.length} {authStore.inspectors.length === 1 ? 'inspector' : 'inspectors'}</span></div>{authStore.inspectors.length === 0 ? <div className="roster-empty"><Users size={22} /><strong>No inspector accounts yet.</strong><span>Add the first person who will conduct visits.</span></div> : <div className="roster-list">{authStore.inspectors.map((inspector) => <div className="roster-row" key={inspector.id}><div className="roster-avatar"><UserRound size={16} /></div><div className="roster-main"><strong>{inspector.name}</strong><span>@{inspector.username} · added {formatShortDate(inspector.createdAt)}</span></div><span className={`account-status ${inspector.active === false ? 'inactive' : 'active'}`}><span /> {inspector.active === false ? 'Paused' : 'Active'}</span><button className="roster-action" onClick={() => resetPassword(inspector)} title="Reset password"><KeyRound size={15} /></button><button className="roster-action" onClick={() => toggleInspector(inspector)} title={inspector.active === false ? 'Activate account' : 'Pause account'}>{inspector.active === false ? <LogIn size={15} /> : <LogOut size={15} />}</button></div>)}</div>}</section></div><section className="panel admin-credentials-panel"><div><div className="eyebrow">ADMIN SETTINGS</div><h2>Change admin credentials.</h2><p className="team-muted">Update the admin name, username, or password. Your current password is required for every change.</p></div><form className="admin-credentials-form" onSubmit={saveAdminCredentials}><label className="field"><span>Admin name <b>*</b></span><input value={adminName} onChange={(event) => setAdminName(event.target.value)} /></label><label className="field"><span>Admin username <b>*</b></span><input value={adminUsername} onChange={(event) => setAdminUsername(event.target.value)} /></label><label className="field"><span>Current password <b>*</b></span><input type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} placeholder="Required to save changes" /></label><label className="field"><span>New password</span><input type="password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} placeholder="Leave blank to keep current password" /></label>{securityError && <div className="auth-error"><XCircle size={15} /> {securityError}</div>}<button className="button secondary" type="submit"><KeyRound size={16} /> Save admin credentials</button></form></section><div className="team-security-note"><ShieldCheck size={17} /><span><strong>Role boundaries</strong> Admins manage inspector accounts. Inspectors can work inspections but do not see this roster.</span></div></div>;
 }
 
 function Dashboard({ records, onStart, onOpen, onRemove, onLibrary }) {
@@ -706,6 +698,6 @@ createRoot(document.getElementById('root')).render(<AuthGate />);
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js?v=2').catch(() => {});
+    navigator.serviceWorker.register('/sw.js?v=3').catch(() => {});
   });
 }

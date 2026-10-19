@@ -1,47 +1,9 @@
-# CareAudit implementation outcomes
-
-## Checklist library and source fidelity
-- [x] The application contains a checklist library for the seven supplied facility audit templates: Community Pharmacy, Dental Specialty Clinic, Dental Specialty Clinic (MOH 4Ps), Medium Private Clinic, Physiotherapy Clinic, Primary Clinic, and Specialty Ophthalmology Clinic.
-- [x] Checklist wording, section names, categories, optional items, inspection types, and applicable response scales remain faithful to the supplied DOCX source documents.
-
-## Dashboard and inspection records
-- [x] The dashboard shows active drafts and completed inspections with controls to start, reopen, review, and locally remove saved records.
-- [x] Draft and completed inspection records persist in the browser and can be reopened for continued work or review without external accounts or integrations.
-
-## New inspection setup
-- [x] A user can select a facility type/checklist template and capture general facility, owner, inspection, and template-specific introductory information before auditing.
-
-## Guided audit workspace
-- [x] The audit workspace is organized by checklist section with visible progress and previous/next navigation.
-- [x] Each item supports the template-appropriate Met / Partially Met / Unmet or Available / Not Available states, with remarks and optional-item handling preserved.
-- [x] Section and overall compliance scoring updates automatically, excludes optional/non-applicable items from the denominator where appropriate, and highlights critical and major gaps.
-
-## Summary, completion, and reporting
-- [x] The section summary presents completion status, scores, unanswered requirements, and critical/major gaps.
-- [x] Completion validates required responses and lets the user finalize an inspection or return to corrections.
-- [x] The report view includes facility details, assessment results, scores, remarks, critical and major gaps, and print-optimized output for browser printing/PDF export.
-
-## Delivery
-- [x] Responsive presentation works across desktop and mobile layouts.
-- [x] Static route manifest is served at `/manus-routes.json` and the production build outputs a usable `index.html`.
 
 
-## Evidence recorded
+## Durable account persistence
 
-The Vite production build passes, `/manus-routes.json` and the offline app-shell assets respond over HTTP 200, the seven route surfaces were visually inspected at desktop and mobile widths, and stale deep links resolve to a recovery view.
-
-
-## Role-based access
-
-- [x] The first entry screen provides a first-run admin setup flow and subsequent admin sign-in with a username and password.
-- [x] An authenticated admin can add many inspector accounts by assigning each inspector a name, username, and password, and can pause, activate, or reset inspector access.
-- [x] Inspectors can sign in with their assigned credentials and do not see the admin-only inspector roster or its navigation entry.
-- [x] Role sessions persist locally, passwords are stored as SHA-256 hashes, and the app remains compatible with the offline-ready workspace model.
-- [x] `/team` is included in the route manifest, diagnostics remain registered, the production build passes, and the admin/inspector flow was exercised in Preview.
-
-
-## Default admin credentials
-
-- [x] First-run setup visibly provides the requested default admin username `admin` and password `12345678`.
-- [x] A signed-in admin can change the admin display name, username, and password from Admin Settings, with the current password required and the session preserved after a username change.
-- [x] The changed admin credentials were verified by signing out and signing back in successfully.
+- [x] The project has managed server and MySQL database capabilities enabled, with deployment configured through `Dockerfile` and `/api/health`.
+- [x] The server bootstraps durable `careaudit_users` and `careaudit_sessions` tables, seeds the initial admin account as `admin` / `12345678`, and preserves subsequent account edits across restarts.
+- [x] Login, logout, session validation, inspector creation, inspector activation, inspector password reset, and admin credential updates use same-origin server API routes with HTTP-only secure cookies.
+- [x] The standard development command starts Vite and the database API together; the production build and server syntax checks pass; managed diagnostics remain registered.
+- [x] Preview verification confirmed admin login, database-backed inspector creation and roster refresh, and inspector login with the persisted account.
