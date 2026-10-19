@@ -203,7 +203,7 @@ h2, h3 { letter-spacing: -.055em; }
 
 
 /* Role-aware access and admin control room */
-.auth-shell { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(430px, .85fr); background: var(--paper); }
+.auth-shell { min-height: 100vh; display: flex; justify-content: center; background: linear-gradient(135deg, #f7faf8 0%, #eef6f1 100%); }
 .auth-art { min-height: 100vh; position: relative; overflow: hidden; background: linear-gradient(145deg, #143c3a 0%, #0e5b56 62%, #1c736a 100%); color: #edf8f0; padding: 58px 6vw; display: flex; align-items: flex-end; }
 .auth-art-copy { position: relative; z-index: 2; max-width: 530px; }
 .auth-art-copy .eyebrow { color: #a9d9c2; }
@@ -215,8 +215,8 @@ h2, h3 { letter-spacing: -.055em; }
 .orbit-b { width: 420px; height: 420px; right: -47px; top: 185px; border-color: rgba(194,239,211,.35); }
 .auth-sun { position: absolute; width: 150px; height: 150px; border-radius: 50%; background: #f4d98d; opacity: .92; right: 155px; top: 125px; }
 .auth-stamp { position: absolute; right: 9vw; top: 335px; width: 100px; height: 100px; border: 1px solid rgba(194,239,211,.58); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 4px; color: #c0e6cf; font: 9px/1.35 var(--mono); letter-spacing: .08em; transform: rotate(9deg); }
-.auth-panel { background: #fff; padding: 54px clamp(33px, 6vw, 88px); display: flex; flex-direction: column; justify-content: center; min-width: 0; }
-.auth-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 72px; }
+.auth-panel { width: min(100%, 620px); min-height: 100vh; background: #fff; padding: 54px clamp(33px, 6vw, 88px); display: flex; flex-direction: column; justify-content: center; min-width: 0; box-shadow: 0 0 40px rgba(24,53,51,.08); }
+.auth-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 54px; }
 .auth-brand .brand-symbol { background: var(--deep); color: #fff; }
 .auth-panel-copy { max-width: 430px; }
 .auth-panel-copy h2 { font-size: 33px; margin: 12px 0 10px; }
